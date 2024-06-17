@@ -52,6 +52,6 @@ export const globalstyles = StyleSheet.create({
     alignSelf: "flex-start",
     marginLeft: responsiveWidth(2.5),
     fontSize: responsiveFontSize(2.6),
-    fontFamily: "outfit-medium",
+    fontFamily: "myfont-bold",
   },
 });

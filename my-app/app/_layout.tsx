@@ -35,6 +35,8 @@ export default function RootLayout() {
     'outfit-bold': require('./../assets/fonts/Outfit-Bold.ttf'),
     'outfit-medium': require('./../assets/fonts/Outfit-Medium.ttf'),
     'outfit': require('./../assets/fonts/Outfit-Regular.ttf'),
+    'myfont-bold': require('./../assets/fonts/YanoneKaffeesatz-Bold.ttf'),
+    'myfont': require('./../assets/fonts/YanoneKaffeesatz-Medium.ttf'),
   });
 
   useEffect(() => {

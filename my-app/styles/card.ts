@@ -12,7 +12,7 @@ export const cardstyles = StyleSheet.create({
             height: 2,
         },
         shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowRadius: 3.4,
         elevation: 5,
         overflow: 'hidden',
         padding: responsiveWidth(0.6), 

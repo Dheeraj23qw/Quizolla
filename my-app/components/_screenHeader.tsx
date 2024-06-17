@@ -38,8 +38,7 @@ const styles = StyleSheet.create({
   
 },
     headerTitle: {
-        fontSize: responsiveFontSize(2.95),
-        fontWeight: 'bold',
+        fontSize: responsiveFontSize(3),
         color: 'white',
         fontFamily:'outfit-bold',
     }

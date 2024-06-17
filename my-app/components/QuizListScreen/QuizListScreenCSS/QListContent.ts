@@ -27,7 +27,7 @@ export const QListstyles = StyleSheet.create({
     
     iconContainer: {
         height: responsiveHeight(5), 
-        width: responsiveHeight(8),
+        width: responsiveHeight(9),
         borderRadius: responsiveHeight(2.1),
         justifyContent: "center",
         alignItems: "center",

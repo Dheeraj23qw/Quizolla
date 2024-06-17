@@ -9,7 +9,7 @@ import {
   responsiveWidth,
   responsiveFontSize
 } from "react-native-responsive-dimensions";
-import { useRouter,Link } from "expo-router";
+import { useRouter, Link } from "expo-router";
 
 interface Quiz {
   name: string;
@@ -96,17 +96,17 @@ const QuizListContent = () => {
           </View>
         </View>
       </View>
-      <TouchableOpacity
-        style={QListstyles.iconContainer}
-      >
-        <Link
+      <Link
         href={{
           pathname: '/quizdetail/[quiz]',
           params: item,
-        }}>
-        <Entypo name="controller-play" size={responsiveHeight(3)} color="black" />
-        </Link>
-      </TouchableOpacity>
+        }}
+        asChild
+      >
+        <TouchableOpacity style={QListstyles.iconContainer}>
+          <Entypo name="controller-play" size={responsiveHeight(3)} color="black" />
+        </TouchableOpacity>
+      </Link>
     </View>
   );
 
