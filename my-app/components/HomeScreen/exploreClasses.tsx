@@ -3,15 +3,17 @@ import { AntDesign } from "@expo/vector-icons";
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 import { globalstyles } from "@/styles/global";
 import { cardstyles } from "@/styles/card";
+import { useRouter } from "expo-router";
 
 
 
 const ExploreClasses = () => {
+  const router = useRouter()
   return (
     <View style={[globalstyles.container,{backgroundColor:"white"}]}>
       <View style={[globalstyles.Container3, { paddingRight: responsiveHeight(3)}]}>
         <Text style={[globalstyles.headerText]}>Explore Classes</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push("/classrooms")}>
           <AntDesign name="arrowright" size={26} color="black" />
         </TouchableOpacity>
       </View>

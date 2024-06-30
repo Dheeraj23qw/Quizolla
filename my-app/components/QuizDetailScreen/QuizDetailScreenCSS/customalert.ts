@@ -43,5 +43,19 @@ import {
       fontSize: responsiveFontSize(2.4),
       fontFamily:"myfont-bold",
     },
+    Card: {
+   
+      shadowColor: '#000',
+      shadowOffset: {
+          width: 0,
+          height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.4,
+      elevation: 5,
+      overflow: 'hidden',
+      padding: responsiveWidth(0.6), 
+   
+  },
 
   })
