@@ -1,12 +1,15 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import React, { useState, useEffect } from "react";
-import { StatusBar, Text, TouchableOpacity, View, ScrollView } from "react-native";
-import { responsiveFontSize } from "react-native-responsive-dimensions";
-import { SafeAreaView } from "react-native-safe-area-context";
-import QuizSider from "@/components/Sidebars/QuizSider";
-import { questions } from "@/constants/question";
-import { styles } from "./QuizscreenCss";
-import { useRouter } from "expo-router";
+import React, { useState } from 'react';
+import { ScrollView, StatusBar, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import QuizSider from '@/components/Sidebars/QuizSider';
+import { questions } from '@/constants/question';
+import { styles } from './QuizscreenCss';
+import { useRouter } from 'expo-router';
+import HeaderComponent from '@/components/QuizScreen/QuizHeaderSingle';
+import QuestionComponent from '@/components/QuizScreen/QuizQuestion';
+import OptionsComponent from '@/components/QuizScreen/QuizOptions';
+import LifelineComponent from '@/components/QuizScreen/Lifelines';
+import HintComponent from '@/components/QuizScreen/message';
 
 interface QuizScreenProps {}
 
@@ -26,7 +29,8 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
   // Limiting questions to 5
   const limitedQuestions = questions.slice(0, 5);
 
-  const currentQuestion = flippedQuestionIndex !== null ? limitedQuestions[flippedQuestionIndex] : limitedQuestions[currentQuestionIndex];
+  const currentQuestion =
+    flippedQuestionIndex !== null ? limitedQuestions[flippedQuestionIndex] : limitedQuestions[currentQuestionIndex];
   const { question, options, correctAnswer, hint: questionHint } = currentQuestion;
 
   const checkAnswer = (answer: string): boolean => {
@@ -38,15 +42,15 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
   };
 
   const useLifeline = (lifeline: string) => {
-    if (lifeline === "Hint" && !usedHint) {
+    if (lifeline === 'Hint' && !usedHint) {
       setUsedHint(true);
       setHint(questionHint);
-    } else if (lifeline === "50-50" && !usedFiftyFifty) {
+    } else if (lifeline === '50-50' && !usedFiftyFifty) {
       setUsedFiftyFifty(true);
-      const incorrectOptions = options.filter(option => option !== correctAnswer);
+      const incorrectOptions = options.filter((option) => option !== correctAnswer);
       const randomOptions = incorrectOptions.sort(() => 0.5 - Math.random()).slice(0, 2);
       setFiftyFiftyOptions(randomOptions);
-    } else if (lifeline === "Flip" && !usedFlip) {
+    } else if (lifeline === 'Flip' && !usedFlip) {
       setUsedFlip(true);
       setSelectedAnswer(null);
       setHint(null);
@@ -70,17 +74,16 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
         setTimeout(() => {
           moveToNextQuestion();
           setCurrentQuestionIndex((prevIndex) => (prevIndex + 1) % limitedQuestions.length);
-          if (currentQuestionIndex  === limitedQuestions.length - 1) {
+          if (currentQuestionIndex === limitedQuestions.length - 1) {
             // Navigate to winner screen after answering all questions correctly
-            router.push("/winner");
+            router.push('/winner');
           }
         }, 1000);
-        setCorrectAnswers(prev => prev + 1); // Increment correct answer count
-      }
-      else {
+        setCorrectAnswers((prev) => prev + 1); // Increment correct answer count
+      } else {
         setTimeout(() => {
           // Navigate to result screen on quiz loss
-          router.push("/looser");
+          router.push('/looser');
         }, 1000);
       }
     }
@@ -98,42 +101,6 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
     setFlippedQuestionIndex(null);
   };
 
-  const renderOptions = () => {
-    return options.map((option, index) => (
-      <TouchableOpacity
-        key={index}
-        style={[
-          styles.option,
-          selectedAnswer === option && checkAnswer(option)
-            ? styles.correctOption
-            : selectedAnswer === option && !checkAnswer(option)
-            ? styles.wrongOption
-            : null,
-        ]}
-        onPress={() => handleOptionPress(option)}
-        disabled={!!selectedAnswer}
-      >
-        <Text
-          style={[
-            styles.optionLabel,
-            selectedAnswer === option ? styles.selectedText : null,
-          ]}
-        >
-          {String.fromCharCode(65 + index) + ".  "}
-        </Text>
-        <Text
-          style={[
-            styles.optionText,
-            selectedAnswer === option ? styles.selectedText : null,
-            fiftyFiftyOptions.includes(option) ? styles.redText : null,
-          ]}
-        >
-          {option}
-        </Text>
-      </TouchableOpacity>
-    ));
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#BEA1FE" barStyle="dark-content" />
@@ -144,54 +111,30 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.content}>
-          <View style={styles.header}>
-            <TouchableOpacity onPress={toggleSidebar}>
-              <MaterialIcons
-                name="menu"
-                size={responsiveFontSize(3.5)}
-                color="black"
-              />
-            </TouchableOpacity>
-            <Text style={styles.headerText}>Quiz</Text>
-            <Text style={styles.timer}>10:00</Text>
-          </View>
+          <HeaderComponent toggleSidebar={toggleSidebar} />
 
-          <View style={styles.questionContainer}>
-            <Text style={styles.questionNumber}>Question {currentQuestionIndex + 1}</Text>
-            <Text style={styles.questionText}>{question}</Text>
-          </View>
+          <QuestionComponent
+            questionNumber={currentQuestionIndex + 1}
+            question={question}
+          />
 
-          <View style={styles.optionsContainer}>
-            {renderOptions()}
-          </View>
+          <OptionsComponent
+            options={options}
+            handleOptionPress={handleOptionPress}
+            selectedAnswer={selectedAnswer}
+            fiftyFiftyOptions={fiftyFiftyOptions}
+            selectedOption={selectedAnswer || ''} // Ensure to pass selectedOption
+          />
 
-          <View style={styles.lifelineContainer}>
-            {["Hint", "50-50", "Flip"].map((lifeline, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.lifeline,
-                  (lifeline === "Hint" && usedHint) ||
-                  (lifeline === "50-50" && usedFiftyFifty) ||
-                  (lifeline === "Flip" && usedFlip)
-                    ? styles.disabledLifeline
-                    : null,
-                ]}
-                onPress={() => useLifeline(lifeline)}
-                disabled={(lifeline === "Hint" && usedHint) ||
-                  (lifeline === "50-50" && usedFiftyFifty) ||
-                  (lifeline === "Flip" && usedFlip) ||
-                  !!selectedAnswer}
-              >
-                <Text style={styles.lifelineText}>{lifeline}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          {hint && (
-            <View style={styles.msgContainer}>
-              <Text style={styles.hintText}>{hint}</Text>
-            </View>
-          )}
+          <LifelineComponent
+            useLifeline={useLifeline}
+            usedHint={usedHint}
+            usedFiftyFifty={usedFiftyFifty}
+            usedFlip={usedFlip}
+            selectedAnswer={selectedAnswer}
+          />
+
+          {hint && <HintComponent hint={hint} />}
         </View>
       </ScrollView>
     </SafeAreaView>

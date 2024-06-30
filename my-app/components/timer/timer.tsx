@@ -1,76 +1,82 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
-import Constants from 'expo-constants';
-import { useCountdown } from 'react-native-countdown-circle-timer'
+import Svg, { Rect } from 'react-native-svg';
+import { useCountdown } from 'react-native-countdown-circle-timer';
 
-export default function history() {
-  const duration = 60;
+const Timer: React.FC<{ duration: number; onComplete?: () => void }> = ({
+  duration,
+  onComplete
+}) => {
+  const width = 300;
+  const height = 100;
+  const terminalWidth = 20;
+
+  const colors = [
+    ['#00ff00', 0.5], // green for the first half of the duration
+    ['#ff0000', 0.5]  // red for the second half of the duration
+  ] as any;
 
   const {
-    path,
-    pathLength,
-    stroke,
-    strokeDashoffset,
-    remainingTime,
-    elapsedTime,
-    size,
-    strokeWidth,
-  } = useCountdown({ isPlaying: true, duration, colors: 'url(#your-unique-id)' })
+    remainingTime
+  } = useCountdown({
+    duration,
+    colors,
+    onComplete: () => {
+      if (onComplete) {
+        onComplete(); // Call onComplete prop if provided
+      }
+    }
+  });
+
+  const remainingWidth = (width - terminalWidth) * (remainingTime / duration);
+  const fillColor = interpolateColor(remainingTime, duration);
 
   return (
     <View style={styles.container}>
-      <View style={{ width: size, height: size, position: 'relative' }}>
-        <Svg width={size} height={size}>
-          <Defs>
-            <LinearGradient id="your-unique-id" x1="1" y1="0" x2="0" y2="0">
-              <Stop offset="5%" stopColor="gold"/>
-              <Stop offset="95%" stopColor="red"/>
-            </LinearGradient>
-          </Defs>
-          <Path
-            d={path}
-            fill="none"
-            stroke="#d9d9d9"
-            strokeWidth={strokeWidth}
+      <View style={{ width: width + terminalWidth, height, position: 'relative' }}>
+        <Svg width={width + terminalWidth} height={height}>
+          <Rect
+            x={0}
+            y={0}
+            width={remainingWidth}
+            height={height}
+            fill={fillColor}
           />
-          {elapsedTime !== duration && (
-            <Path
-              d={path}
-              fill="none"
-              stroke={stroke}
-              strokeLinecap="butt"
-              strokeWidth={strokeWidth}
-              strokeDasharray={pathLength}
-              strokeDashoffset={strokeDashoffset}
-            />
-          )}
         </Svg>
         <View style={styles.time}>
-          <Text style={{ fontSize: 50 }}>{remainingTime}</Text>
+          <Text style={styles.timeText}>{remainingTime}</Text>
         </View>
       </View>
     </View>
   );
-}
+};
+
+const interpolateColor = (remainingTime: number, duration: number) => {
+  const ratio = remainingTime / duration;
+  const red = Math.min(255, Math.max(0, 255 * (1 - ratio)));
+  const green = Math.min(255, Math.max(0, 255 * ratio));
+  return `rgb(${red},${green},0)`;
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0.01,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
-    padding: 8,
   },
   time: {
-     display: 'flex',
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    left: 0,
-    top: 0,
-    width: '100%',
-    height: '100%'
-  }
-});       
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: 'grey',
+  },
+  timeText: {
+    fontSize: 20,
+    color: 'black',
+  },
+});
+
+export default Timer;

@@ -1,10 +1,19 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { Text, View } from 'react-native';
+import { styles } from '@/screens/QuizScreen/QuizscreenCss';
 
-export default function QuizQuestion() {
-  return (
-    <View>
-      <Text>QuizQuestion</Text>
-    </View>
-  )
+interface QuestionComponentProps {
+  questionNumber: number;
+  question: string;
 }
+
+const QuestionComponent: React.FC<QuestionComponentProps> = ({ questionNumber, question }) => {
+  return (
+    <View style={styles.questionContainer}>
+      <Text style={styles.questionNumber}>Question {questionNumber}</Text>
+      <Text style={styles.questionText}>{question}</Text>
+    </View>
+  );
+};
+
+export default QuestionComponent;

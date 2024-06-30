@@ -5,14 +5,19 @@ import ScreenHeader from "@/components/_screenHeader";
 import {  View } from "react-native";
 import { globalstyles } from "@/styles/global";
 import { SafeAreaView } from "react-native-safe-area-context";
+import QuizTimer from "@/components/QuizScreen/QuizTimer";
+import Timer from "@/components/timer/timer";
 export default function profile() {
   return (
-    <SafeAreaView style={globalstyles.container}>
-      <ScreenHeader name="Profile" />
-       <View style={[globalstyles.Container2,{flex:10}]}>
-      <ProfileInfo />
-      <Badges />
-      </View>
-    </SafeAreaView>
+    // <SafeAreaView style={globalstyles.container}>
+    //   <ScreenHeader name="Profile" />
+    //    <View style={[globalstyles.Container2,{flex:10}]}>
+    //   <ProfileInfo />
+    //   <Badges />
+    //   </View>
+    // </SafeAreaView>
+    <>
+
+    </>
   );
 }
