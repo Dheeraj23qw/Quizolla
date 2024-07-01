@@ -1,14 +1,7 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { styles } from '@/screens/QuizScreen/QuizscreenCss';
-
-interface LifelineComponentProps {
-  useLifeline: (lifeline: string) => void;
-  usedHint: boolean;
-  usedFiftyFifty: boolean;
-  usedFlip: boolean;
-  selectedAnswer: string | null;
-}
+import { LifelineComponentProps } from '@/types/quizScreenTypes';
 
 const LifelineComponent: React.FC<LifelineComponentProps> = ({
   useLifeline,

@@ -1,34 +1,40 @@
 import React from 'react';
 import { Text, TouchableOpacity, View, TextStyle } from 'react-native';
 import { styles } from '@/screens/QuizScreen/QuizscreenCss';
-
-interface OptionsComponentProps {
-  options: string[];
-  handleOptionPress: (option: string) => void;
-  selectedAnswer: string | null;
-  fiftyFiftyOptions: string[];
-  selectedOption: string; // Ensure selectedOption matches your usage
-}
+import { OptionsComponentProps } from '@/types/quizScreenTypes';
 
 const OptionsComponent: React.FC<OptionsComponentProps> = ({
   options,
   handleOptionPress,
   selectedAnswer,
   fiftyFiftyOptions,
-  selectedOption,
+  correctAnswer,
 }) => {
   const renderOptions = () => {
     return options.map((option, index) => {
-      const isSelected = selectedOption === option;
+      const isFiftyFiftyActive = fiftyFiftyOptions.length > 0;
+      const optionStyle: TextStyle[] = [styles.option];
+      const textStyle: TextStyle[] = [styles.optionText];
+      const labelStyle: TextStyle[] = [styles.optionLabel];
+      const isSelected = option === selectedAnswer;
+      const isCorrect = option === correctAnswer;
+      const isFiftyFiftyWrong = isFiftyFiftyActive && fiftyFiftyOptions.includes(option) && !isCorrect;
 
-      // Define styles based on conditions
-      const optionStyle: TextStyle[] = [
-        styles.option,
-        isSelected ? styles.selectedOption : {},
-        selectedAnswer === option && fiftyFiftyOptions.includes(option)
-          ? styles.redText
-          : {},
-      ];
+      if (selectedAnswer) {
+        if (isCorrect) {
+          optionStyle.push(styles.correctOption);
+          textStyle.push(styles.selectedOptionText);
+          labelStyle.push(styles.selectedOptionText);
+        } else if (isSelected) {
+          optionStyle.push(styles.wrongOption);
+          textStyle.push(styles.selectedOptionText);
+          labelStyle.push(styles.selectedOptionText);
+        }
+      } else if (isFiftyFiftyWrong) {
+        optionStyle.push(styles.wrongOption);
+        textStyle.push(styles.selectedOptionText);
+        labelStyle.push(styles.selectedOptionText);
+      }
 
       return (
         <TouchableOpacity
@@ -37,10 +43,10 @@ const OptionsComponent: React.FC<OptionsComponentProps> = ({
           onPress={() => handleOptionPress(option)}
           disabled={!!selectedAnswer}
         >
-          <Text style={styles.optionLabel}>
+          <Text style={labelStyle}>
             {String.fromCharCode(65 + index) + '.  '}
           </Text>
-          <Text style={styles.optionText}>{option}</Text>
+          <Text style={textStyle}>{option}</Text>
         </TouchableOpacity>
       );
     });

@@ -93,24 +93,24 @@ export const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2),
     color: "#495057",
   },
-  selectedOption: {
-    backgroundColor: "#007bff", // Example color for selected option background
-    borderColor: "#007bff", // Example color for selected option border
-  },
-  selectedText: {
-    color: "#ffffff", // Style for selected option text
-  },
+
+
   correctOption: {
     backgroundColor: "#28a745",
     borderColor: "#28a745",
+    color: "#ffffff",
   },
   wrongOption: {
     backgroundColor: "#dc3545",
     borderColor: "#dc3545",
+    
   },
-  redText: {
-    color: "#dc3545",
-  },
+  selectedOptionText:{
+    fontSize: responsiveFontSize(2.1),
+    color: "#ffffff",
+    fontWeight: "bold",
+  
+},
   hintText: {
     fontSize: responsiveFontSize(2),
     color: "#17a2b8",

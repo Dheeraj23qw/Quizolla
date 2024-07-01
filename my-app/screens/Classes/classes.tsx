@@ -18,7 +18,7 @@ type RenderClassItemProps = {
 };
 
 const renderClassItem = ({ item }: RenderClassItemProps) => (
-  <TouchableOpacity style={styles.classItem} onPress={() => console.log(`${item} pressed`)}>
+  <TouchableOpacity style={styles.classItem}>
     <Text>{item}</Text>
   </TouchableOpacity>
 );

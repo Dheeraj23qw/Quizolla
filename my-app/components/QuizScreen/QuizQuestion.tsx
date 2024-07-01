@@ -1,11 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { styles } from '@/screens/QuizScreen/QuizscreenCss';
-
-interface QuestionComponentProps {
-  questionNumber: number;
-  question: string;
-}
+import { QuestionComponentProps } from '@/types/quizScreenTypes';
 
 const QuestionComponent: React.FC<QuestionComponentProps> = ({ questionNumber, question }) => {
   return (

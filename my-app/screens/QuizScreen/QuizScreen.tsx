@@ -84,7 +84,7 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
         setTimeout(() => {
           // Navigate to result screen on quiz loss
           router.push('/looser');
-        }, 1000);
+        }, 2000);
       }
     }
   };
@@ -124,6 +124,7 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
             selectedAnswer={selectedAnswer}
             fiftyFiftyOptions={fiftyFiftyOptions}
             selectedOption={selectedAnswer || ''} // Ensure to pass selectedOption
+            correctAnswer={correctAnswer} // Pass correctAnswer as prop
           />
 
           <LifelineComponent

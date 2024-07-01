@@ -1,6 +1,6 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import { styles } from '@/screens/QuizScreen/QuizscreenCss';
+import React from "react";
+import { Text, View } from "react-native";
+import { styles } from "@/screens/QuizScreen/QuizscreenCss";
 
 interface HintComponentProps {
   hint: string | null;
