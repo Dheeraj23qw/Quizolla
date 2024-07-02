@@ -1,19 +1,28 @@
-import { View, Image } from "react-native";;
-import { cardstyles } from "@/styles/card";
+import React, { useState, useEffect } from "react";
+import { View, Text } from "react-native";
+import { motivationalMessages, consolationMessages } from "@/constants/message";
 import { winnerstyles } from "./winnerScreenCSS";
 
-
-export default function Msg() {
-  return (
-    <>
-    <View style={winnerstyles.messageContainer}>
-        <View style={{ flex: 1 }}>
-          <Image
-            source={require("../../assets/images/congratulation/congo.png")}
-            style={cardstyles.cardImage}
-          />
-        </View>
-      </View>
-    </>
-  )
+interface MsgProps {
+  isWinner: boolean;
 }
+
+const Msg: React.FC<MsgProps> = ({ isWinner }) => {
+  const [selectedMessage, setSelectedMessage] = useState<string>("");
+
+  useEffect(() => {
+    const messages = isWinner ? motivationalMessages : consolationMessages;
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    setSelectedMessage(messages[randomIndex]);
+  }, [isWinner]);
+
+  return (
+    <View style={winnerstyles.motivationContainer}>
+    <View style={winnerstyles.motivationCard}>
+      <Text style={winnerstyles.motivationalMessage}>{selectedMessage}</Text>
+    </View>
+    </View>
+  );
+};
+
+export default Msg;

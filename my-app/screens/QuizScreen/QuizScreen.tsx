@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, StatusBar, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import QuizSider from '@/components/Sidebars/QuizSider';
@@ -24,7 +24,12 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
   const [hint, setHint] = useState<string | null>(null);
   const [fiftyFiftyOptions, setFiftyFiftyOptions] = useState<string[]>([]);
   const [skippedQuestions, setSkippedQuestions] = useState<number[]>([]);
-  const [correctAnswers, setCorrectAnswers] = useState<number>(0); // Track correct answers
+  const [correctAnswers, setCorrectAnswers] = useState<number>(0);
+ 
+
+  // Timer state
+  const [timeLeft, setTimeLeft] = useState<number>(10); // Initial time for each question
+  const [timerKey, setTimerKey] = useState<number>(0); // Key to reset timer
 
   // Limiting questions to 5
   const limitedQuestions = questions.slice(0, 5);
@@ -33,10 +38,55 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
     flippedQuestionIndex !== null ? limitedQuestions[flippedQuestionIndex] : limitedQuestions[currentQuestionIndex];
   const { question, options, correctAnswer, hint: questionHint } = currentQuestion;
 
-  const checkAnswer = (answer: string): boolean => {
-    return answer === correctAnswer;
-  };
+  const router = useRouter();
 
+  useEffect(() => {
+    if (correctAnswers === limitedQuestions.length) {
+      router.push({
+        pathname: '/winner',
+        params: {
+          correctAnswers,
+          isWinner: "true", 
+        },
+      });
+    }
+   
+  }, [correctAnswers]);
+
+  useEffect(() => {
+    if (selectedAnswer && selectedAnswer !== correctAnswer) {
+      const timer = setTimeout(() => {
+        router.push({
+          pathname: '/winner',
+          params: {
+            correctAnswers,
+            isWinner: "false", 
+          },
+        });
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedAnswer]);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      handleTimeUp();
+    }
+  }, [timeLeft]);
+
+  const handleTimeUp = () => {
+    if (correctAnswers < limitedQuestions.length) {
+      // Navigate to loser screen
+      router.push({
+        pathname: '/winner',
+        params: {
+          correctAnswers,
+          isWinner: "false", 
+        },
+      });
+    }
+
+  };
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -58,38 +108,33 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
       flipQuestion();
     }
   };
-
+       
   const flipQuestion = () => {
     let newQuestionIndex;
+    const usedQuestionIds = skippedQuestions.map(index => limitedQuestions[index].id).concat(limitedQuestions[currentQuestionIndex].id);
+
     do {
       newQuestionIndex = Math.floor(Math.random() * limitedQuestions.length);
-    } while (newQuestionIndex === currentQuestionIndex || skippedQuestions.includes(newQuestionIndex));
+    } while (usedQuestionIds.includes(limitedQuestions[newQuestionIndex].id));
+
     setFlippedQuestionIndex(newQuestionIndex);
+    setSkippedQuestions([...skippedQuestions, currentQuestionIndex]);
+    setTimeLeft(10);
+    setTimerKey((prevKey) => prevKey + 1);
   };
 
   const handleOptionPress = (option: string) => {
     if (!selectedAnswer) {
       setSelectedAnswer(option);
-      if (checkAnswer(option)) {
+      if (option === correctAnswer) {
         setTimeout(() => {
           moveToNextQuestion();
           setCurrentQuestionIndex((prevIndex) => (prevIndex + 1) % limitedQuestions.length);
-          if (currentQuestionIndex === limitedQuestions.length - 1) {
-            // Navigate to winner screen after answering all questions correctly
-            router.push('/winner');
-          }
-        }, 1000);
-        setCorrectAnswers((prev) => prev + 1); // Increment correct answer count
-      } else {
-        setTimeout(() => {
-          // Navigate to result screen on quiz loss
-          router.push('/looser');
+          setCorrectAnswers((prev) => prev + 1);
         }, 2000);
       }
     }
   };
-
-  const router = useRouter();
 
   const moveToNextQuestion = () => {
     if (flippedQuestionIndex !== null) {
@@ -99,6 +144,8 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
     setHint(null);
     setFiftyFiftyOptions([]);
     setFlippedQuestionIndex(null);
+    setTimeLeft(10);
+    setTimerKey((prevKey) => prevKey + 1);
   };
 
   return (
@@ -111,7 +158,12 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.content}>
-          <HeaderComponent toggleSidebar={toggleSidebar} />
+          <HeaderComponent
+            toggleSidebar={toggleSidebar}
+            onTimeUp={handleTimeUp}
+            correctAnswer={selectedAnswer === correctAnswer}
+            key={timerKey}
+          />
 
           <QuestionComponent
             questionNumber={currentQuestionIndex + 1}
@@ -123,8 +175,8 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
             handleOptionPress={handleOptionPress}
             selectedAnswer={selectedAnswer}
             fiftyFiftyOptions={fiftyFiftyOptions}
-            selectedOption={selectedAnswer || ''} // Ensure to pass selectedOption
-            correctAnswer={correctAnswer} // Pass correctAnswer as prop
+            selectedOption={selectedAnswer || ''}
+            correctAnswer={correctAnswer}
           />
 
           <LifelineComponent

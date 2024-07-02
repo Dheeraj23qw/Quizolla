@@ -8,7 +8,7 @@ const Timer: React.FC<{ duration: number; onComplete?: () => void }> = ({
   onComplete
 }) => {
   const width = 300;
-  const height = 100;
+  const height = 60;
   const terminalWidth = 20;
 
   const colors = [
@@ -32,7 +32,7 @@ const Timer: React.FC<{ duration: number; onComplete?: () => void }> = ({
   const fillColor = interpolateColor(remainingTime, duration);
 
   return (
-    <View style={styles.container}>
+    <View>
       <View style={{ width: width + terminalWidth, height, position: 'relative' }}>
         <Svg width={width + terminalWidth} height={height}>
           <Rect
@@ -59,18 +59,10 @@ const interpolateColor = (remainingTime: number, duration: number) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 0.01,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+ 
   time: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
     borderRadius: 10,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: 'grey',
   },
   timeText: {

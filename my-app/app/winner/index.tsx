@@ -1,8 +1,11 @@
 import React, { useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import Winner from '@/screens/WinnerScreen/Winner'
+import { useLocalSearchParams } from 'expo-router';
+import Winner from '@/screens/WinnerScreen/Winner';
+
 export default function WinnerScreen() {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+  const params = useLocalSearchParams();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -10,9 +13,11 @@ export default function WinnerScreen() {
     });
   }, [navigation]);
 
+  // Retrieve and parse the parameters
+  const correctAnswers = Number(params.correctAnswers);
+  const isWinner = String(params.isWinner); 
+
   return (
-<>
-<Winner/>
-</>
-  )
+    <Winner correctAnswers={correctAnswers} isWinner={isWinner} />
+  );
 }

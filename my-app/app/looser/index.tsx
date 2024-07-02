@@ -11,7 +11,7 @@ export default function LooserScreen() {
   }, [navigation]);
   return (
     <>
-    <ResultScreen />
+    <ResultScreen/>
     </>
   )
 }

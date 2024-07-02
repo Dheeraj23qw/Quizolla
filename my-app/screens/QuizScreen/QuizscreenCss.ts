@@ -112,10 +112,11 @@ export const styles = StyleSheet.create({
   
 },
   hintText: {
-    fontSize: responsiveFontSize(2),
+    fontSize: responsiveFontSize(3.2),
     color: "#17a2b8",
     paddingHorizontal: responsiveWidth(5),
     paddingTop: responsiveHeight(2),
+    fontFamily:"myfont-bold"
   },
   lifelineContainer: {
     flexDirection: "row",
@@ -155,10 +156,11 @@ export const styles = StyleSheet.create({
     paddingTop: responsiveHeight(2),
   },
   msgContainer: {
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: responsiveWidth(5),
-    paddingTop: responsiveHeight(2),
-    paddingBottom: responsiveHeight(2),
-    backgroundColor: "#f8f9fa",
+    paddingVertical: responsiveHeight(2),
+    backgroundColor: "#ffffff",
     borderWidth: 1,
     borderColor: "#dee2e6",
     borderRadius: 5,
@@ -167,5 +169,15 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 1,
+  },
+  
+  timerContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  timerText: {
+    fontSize: responsiveFontSize(2.8),
+    color: 'black',
+    fontWeight: 'bold',
   },
 });

@@ -1,30 +1,36 @@
-import { View, Image, Text, ImageBackground } from "react-native";
-import { globalstyles } from "@/styles/global";
-import { cardstyles } from "@/styles/card";
-import { useUser } from "@clerk/clerk-react";
-import { winnerstyles } from "./winnerScreenCSS";
+import React from 'react';
+import { View, Image, Text } from 'react-native';
+import { useUser } from '@clerk/clerk-react';
+import { winnerstyles } from './winnerScreenCSS';
+import { congratulationMessages, condolenceMessages } from '@/constants/message';
 
-export default function Photo() {
+interface PhotoProps {
+  isWinner: boolean;
+}
+
+const Photo: React.FC<PhotoProps> = ({ isWinner }) => {
   const { user } = useUser();
+
+  const getRandomMessage = () => {
+    const randomIndex = Math.floor(Math.random() * (isWinner ? congratulationMessages.length : condolenceMessages.length));
+    const userName = user?.fullName || 'Winner'; 
+    const messages = isWinner ? congratulationMessages : condolenceMessages;
+    return messages[randomIndex].replace('{name}', userName);
+  };
+
   return (
-    
-      <View style={winnerstyles.photoContainer}>
-        <View style={[cardstyles.Card, winnerstyles.photoCard]}>
-          <ImageBackground
-            source={require("../../assets/images/congratulation/paper.jpg")}
-            style={winnerstyles.imageBackground}
-            imageStyle={{ resizeMode: 'cover' }}
-          >
-            <View style={winnerstyles.overlay}>
-              <Image 
-                source={{ uri: user?.imageUrl }}
-                style={winnerstyles.circularImage}
-              />
-              <Text style={winnerstyles.userNameText}>{user?.fullName}</Text>
-            </View>
-          </ImageBackground>
+    <View style={winnerstyles.photoContainer}>
+      <View style={winnerstyles.photoCard}>
+        <View style={winnerstyles.overlay}>
+          <Image 
+            source={{ uri: user?.imageUrl }}
+            style={winnerstyles.circularImage}
+          />
         </View>
       </View>
-
+      <Text style={winnerstyles.congratulationMessage}>{getRandomMessage()}</Text>
+    </View>
   );
 }
+
+export default Photo;

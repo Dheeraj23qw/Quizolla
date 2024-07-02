@@ -7,6 +7,7 @@ import { globalstyles } from "@/styles/global";
 import { SafeAreaView } from "react-native-safe-area-context";
 import QuizTimer from "@/components/QuizScreen/QuizTimer";
 import Timer from "@/components/timer/timer";
+import Winner from "@/screens/WinnerScreen/Winner";
 export default function profile() {
   return (
     // <SafeAreaView style={globalstyles.container}>
@@ -17,7 +18,7 @@ export default function profile() {
     //   </View>
     // </SafeAreaView>
     <>
-
+    <Winner/>
     </>
   );
 }
