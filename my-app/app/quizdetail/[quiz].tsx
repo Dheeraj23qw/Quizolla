@@ -5,6 +5,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { globalstyles } from "../../styles/global";
 import ScreenHeader from "@/components/_screenHeader";
+import QuizScreen from "@/screens/QuizScreen/QuizScreen";
 
 export default function QuizDetail() {
     const navigation = useNavigation();
@@ -17,10 +18,8 @@ export default function QuizDetail() {
     }, [navigation]);
 
     return (
-        <SafeAreaView style={globalstyles.container}>
-            <ScreenHeader name = {name}  />
-            <View style={[globalstyles.Container2, { flex: 10 }]}>
-            </View>
-        </SafeAreaView>
+      <>
+      <QuizScreen name={name}/>
+      </>
     );
 }

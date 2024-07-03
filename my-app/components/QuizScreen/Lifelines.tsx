@@ -10,30 +10,22 @@ const LifelineComponent: React.FC<LifelineComponentProps> = ({
   usedFlip,
   selectedAnswer,
 }) => {
-  const lifelines = ['Hint', '50-50', 'Flip'];
+  const lifelines = [
+    { name: 'Hint', used: usedHint },
+    { name: '50-50', used: usedFiftyFifty },
+    { name: 'Flip', used: usedFlip },
+  ];
 
   return (
     <View style={styles.lifelineContainer}>
-      {lifelines.map((lifeline, index) => (
+      {lifelines.map(({ name, used }, index) => (
         <TouchableOpacity
           key={index}
-          style={[
-            styles.lifeline,
-            (lifeline === 'Hint' && usedHint) ||
-            (lifeline === '50-50' && usedFiftyFifty) ||
-            (lifeline === 'Flip' && usedFlip)
-              ? styles.disabledLifeline
-              : null,
-          ]}
-          onPress={() => useLifeline(lifeline)}
-          disabled={
-            (lifeline === 'Hint' && usedHint) ||
-            (lifeline === '50-50' && usedFiftyFifty) ||
-            (lifeline === 'Flip' && usedFlip) ||
-            !!selectedAnswer
-          }
+          style={[styles.lifeline, used ? styles.disabledLifeline : null]}
+          onPress={() => useLifeline(name)}
+          disabled={used || !!selectedAnswer}
         >
-          <Text style={styles.lifelineText}>{lifeline}</Text>
+          <Text style={styles.lifelineText}>{name}</Text>
         </TouchableOpacity>
       ))}
     </View>

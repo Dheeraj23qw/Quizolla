@@ -61,7 +61,20 @@ export const motivationalMessages = [
     'Keep your spirits up. You\'re on the right track.',
     'You\'ve got what it takes. Keep pushing forward.',
     'Stay strong. Your determination will lead to success.',
-  ];
+    'This is just a hurdle. You\'ll overcome it and shine.',
+    'Remember, every champion faced challenges. Keep playing!',
+    'Don\'t stop now. Your next victory is waiting for you.',
+    'Every loss is a lesson. Apply it and come back stronger.',
+    'You\'re building resilience. Keep at it!',
+    'You\'re a step closer to mastering the game. Try again!',
+    'This is just the beginning. Greatness awaits you.',
+    'The game isn\'t over until you say so. Go for it!',
+    'Your perseverance is your greatest strength. Keep going!',
+    'Remember, every attempt brings you closer to success.',
+    'Use this experience to fuel your next win. Keep playing!',
+    'Think you can do better? Play again and prove it!',
+];
+
   
 
   export const congratulationMessages = [

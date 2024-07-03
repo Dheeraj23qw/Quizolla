@@ -1,17 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { styles } from '@/screens/QuizScreen/QuizscreenCss';
+import { Ionicons } from '@expo/vector-icons'
+import {  responsiveScreenFontSize } from 'react-native-responsive-dimensions'
 interface HeaderComponentProps {
-  toggleSidebar: () => void;
-  onTimeUp: () => void;  // Function to call when timer reaches zero
-  correctAnswer: boolean; // Prop to indicate if the answer is correct
+  onTimeUp: () => void;
+  correctAnswer: boolean;
+  name: string;
 }
 
-const HeaderComponent: React.FC<HeaderComponentProps> = ({ toggleSidebar, onTimeUp, correctAnswer }) => {
-  const [key, setKey] = useState(0);  // Key to reset the timer
+const HeaderComponent: React.FC<HeaderComponentProps> = ({
+  onTimeUp,
+  correctAnswer,
+  name
+}) => {
+  const [key, setKey] = useState(0);
 
   useEffect(() => {
     if (correctAnswer) {
@@ -19,40 +25,42 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ toggleSidebar, onTime
     }
   }, [correctAnswer]);
 
+  
+  const headerStyles = useMemo(() => ({
+    header: styles.header,
+    headerTextContainer: styles.headerTextContainer,
+    headerText: styles.headerText,
+    timerContainer: styles.timerContainer,
+    timerText: styles.timerText,
+  }), []);
+
   return (
-    <View style={styles.header}>
-      <TouchableOpacity onPress={toggleSidebar}>
-        <MaterialIcons
-          name="menu"
-          size={responsiveFontSize(3.5)}
-          color="black"
-        />
-      </TouchableOpacity>
-      <Text style={styles.headerText}>Quiz</Text>
-      <View style={styles.timerContainer}>
+    <View style={headerStyles.header}>
+      <View style={headerStyles.headerTextContainer}>
+      <Ionicons name="school" size={responsiveScreenFontSize(3.5)} color="white" />
+        <Text style={headerStyles.headerText}>{name}</Text>
+      </View>
+      <View style={headerStyles.timerContainer}>
         <CountdownCircleTimer
           key={key}
           isPlaying
           duration={10}
           size={responsiveFontSize(9)}
           strokeWidth={responsiveFontSize(0.7)}
-          colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-          colorsTime={[7, 5, 2, 0]}
+          colors={['#00FF00', '#FFFF00', '#FFA500', '#FF0000']} 
+          colorsTime={[8, 5, 2, 0]} 
           onComplete={() => {
             onTimeUp();
-            return { shouldRepeat: false };  
+            return { shouldRepeat: false };
           }}
         >
           {({ remainingTime }) => (
-            <Text style={styles.timerText}>{remainingTime}</Text>
+            <Text style={headerStyles.timerText}>{remainingTime}</Text>
           )}
         </CountdownCircleTimer>
       </View>
     </View>
   );
 };
-
-
-
 
 export default HeaderComponent;

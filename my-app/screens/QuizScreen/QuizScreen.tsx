@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { ScrollView, StatusBar, Text, View } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { ScrollView, StatusBar, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import QuizSider from '@/components/Sidebars/QuizSider';
 import { questions } from '@/constants/question';
 import { styles } from './QuizscreenCss';
 import { useRouter } from 'expo-router';
@@ -10,10 +9,13 @@ import QuestionComponent from '@/components/QuizScreen/QuizQuestion';
 import OptionsComponent from '@/components/QuizScreen/QuizOptions';
 import LifelineComponent from '@/components/QuizScreen/Lifelines';
 import HintComponent from '@/components/QuizScreen/message';
+import { globalstyles } from '@/styles/global';
 
-interface QuizScreenProps {}
+interface QuizScreenProps {
+  name: string;
+}
 
-const QuizScreen: React.FC<QuizScreenProps> = () => {
+const QuizScreen: React.FC<QuizScreenProps> = ({name}) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [flippedQuestionIndex, setFlippedQuestionIndex] = useState<number | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -25,17 +27,15 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
   const [fiftyFiftyOptions, setFiftyFiftyOptions] = useState<string[]>([]);
   const [skippedQuestions, setSkippedQuestions] = useState<number[]>([]);
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
- 
+  const [timeLeft, setTimeLeft] = useState<number>(10);
+  const [timerKey, setTimerKey] = useState<number>(0);
 
-  // Timer state
-  const [timeLeft, setTimeLeft] = useState<number>(10); // Initial time for each question
-  const [timerKey, setTimerKey] = useState<number>(0); // Key to reset timer
-
-  // Limiting questions to 5
   const limitedQuestions = questions.slice(0, 5);
 
-  const currentQuestion =
-    flippedQuestionIndex !== null ? limitedQuestions[flippedQuestionIndex] : limitedQuestions[currentQuestionIndex];
+  const currentQuestion = flippedQuestionIndex !== null 
+    ? limitedQuestions[flippedQuestionIndex] 
+    : limitedQuestions[currentQuestionIndex];
+
   const { question, options, correctAnswer, hint: questionHint } = currentQuestion;
 
   const router = useRouter();
@@ -50,7 +50,6 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
         },
       });
     }
-   
   }, [correctAnswers]);
 
   useEffect(() => {
@@ -74,9 +73,8 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
     }
   }, [timeLeft]);
 
-  const handleTimeUp = () => {
-    if (correctAnswers < limitedQuestions.length) {
-      // Navigate to loser screen
+  const handleTimeUp = useCallback(() => {
+    if (correctAnswers < limitedQuestions.length && !selectedAnswer) {
       router.push({
         pathname: '/winner',
         params: {
@@ -85,13 +83,11 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
         },
       });
     }
+  }, [correctAnswers, selectedAnswer]);
 
-  };
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
 
-  const useLifeline = (lifeline: string) => {
+
+  const useLifeline = useCallback((lifeline: string) => {
     if (lifeline === 'Hint' && !usedHint) {
       setUsedHint(true);
       setHint(questionHint);
@@ -107,23 +103,26 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
       setFiftyFiftyOptions([]);
       flipQuestion();
     }
-  };
-       
-  const flipQuestion = () => {
+  }, [usedHint, usedFiftyFifty, usedFlip, questionHint, options, correctAnswer]);
+
+  const flipQuestion = useCallback(() => {
     let newQuestionIndex;
     const usedQuestionIds = skippedQuestions.map(index => limitedQuestions[index].id).concat(limitedQuestions[currentQuestionIndex].id);
-
-    do {
+  
+    while (true) {
       newQuestionIndex = Math.floor(Math.random() * limitedQuestions.length);
-    } while (usedQuestionIds.includes(limitedQuestions[newQuestionIndex].id));
-
+      if (!usedQuestionIds.includes(limitedQuestions[newQuestionIndex].id)) {
+        break;
+      }
+    }
     setFlippedQuestionIndex(newQuestionIndex);
-    setSkippedQuestions([...skippedQuestions, currentQuestionIndex]);
+    setSkippedQuestions(prevSkippedQuestions => [...prevSkippedQuestions, currentQuestionIndex]);
     setTimeLeft(10);
-    setTimerKey((prevKey) => prevKey + 1);
-  };
+    setTimerKey(prevKey => prevKey + 1);
+  }, [currentQuestionIndex, limitedQuestions, skippedQuestions]);
+  
 
-  const handleOptionPress = (option: string) => {
+  const handleOptionPress = useCallback((option: string) => {
     if (!selectedAnswer) {
       setSelectedAnswer(option);
       if (option === correctAnswer) {
@@ -134,11 +133,11 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
         }, 2000);
       }
     }
-  };
+  }, [selectedAnswer, correctAnswer]);
 
-  const moveToNextQuestion = () => {
+  const moveToNextQuestion = useCallback(() => {
     if (flippedQuestionIndex !== null) {
-      setSkippedQuestions([...skippedQuestions, flippedQuestionIndex]);
+      setSkippedQuestions((prevSkippedQuestions) => [...prevSkippedQuestions, flippedQuestionIndex]);
     }
     setSelectedAnswer(null);
     setHint(null);
@@ -146,25 +145,22 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
     setFlippedQuestionIndex(null);
     setTimeLeft(10);
     setTimerKey((prevKey) => prevKey + 1);
-  };
+  }, [flippedQuestionIndex]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={globalstyles.container}>
       <StatusBar backgroundColor="#BEA1FE" barStyle="dark-content" />
-      {sidebarOpen && <QuizSider />}
+      
 
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.content}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+       
           <HeaderComponent
-            toggleSidebar={toggleSidebar}
             onTimeUp={handleTimeUp}
             correctAnswer={selectedAnswer === correctAnswer}
             key={timerKey}
+            name={name}
           />
-
+<View style={[globalstyles.Container2, { flex: 10 }]}>
           <QuestionComponent
             questionNumber={currentQuestionIndex + 1}
             question={question}
@@ -186,9 +182,9 @@ const QuizScreen: React.FC<QuizScreenProps> = () => {
             usedFlip={usedFlip}
             selectedAnswer={selectedAnswer}
           />
-
+</View>
           {hint && <HintComponent hint={hint} />}
-        </View>
+  
       </ScrollView>
     </SafeAreaView>
   );

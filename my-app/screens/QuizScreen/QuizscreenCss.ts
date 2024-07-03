@@ -8,47 +8,35 @@ import {
 } from "react-native-responsive-dimensions";
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: "#f8f9fa",
-  },
+ 
   scrollContent: {
     flexGrow: 1,
   },
-  content: {
-    flex: 4,
-    backgroundColor: "#ffffff",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
+
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: responsiveWidth(5),
     paddingTop: responsiveHeight(2),
     paddingBottom: responsiveHeight(2),
     borderBottomWidth: 1,
     borderBottomColor: "#dee2e6",
-    backgroundColor: "#e9ecef",
+    backgroundColor: "#BEA1FE",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    gap:8
   },
   headerText: {
     fontSize: responsiveFontSize(3.5),
-    fontWeight: "bold",
-    color: "#343a40",
+    color: "white",
+    fontFamily:'outfit-bold'
   },
-  timer: {
-    fontSize: responsiveFontSize(2.5),
-    color: "#495057",
+  headerTextContainer: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap:10
   },
+
   questionContainer: {
     paddingHorizontal: responsiveWidth(5),
     paddingTop: responsiveHeight(3),
@@ -115,7 +103,6 @@ export const styles = StyleSheet.create({
     fontSize: responsiveFontSize(3.2),
     color: "#17a2b8",
     paddingHorizontal: responsiveWidth(5),
-    paddingTop: responsiveHeight(2),
     fontFamily:"myfont-bold"
   },
   lifelineContainer: {
@@ -129,21 +116,26 @@ export const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(3),
     borderWidth: 1,
     borderColor: "#6c757d",
-    borderRadius: 5,
-    backgroundColor: "#6c757d",
+    borderRadius: 999,
+    backgroundColor: "#BEA1FE",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    width: responsiveWidth(20), 
+    height: responsiveWidth(20), 
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   disabledLifeline: {
     backgroundColor: "#adb5bd",
     borderColor: "#adb5bd",
   },
   lifelineText: {
-    fontSize: responsiveFontSize(2),
+    fontSize: responsiveFontSize(3),
     color: "#ffffff",
+    fontFamily:"myfont-bold",
   },
   solutionText: {
     fontSize: responsiveFontSize(2),
@@ -156,6 +148,7 @@ export const styles = StyleSheet.create({
     paddingTop: responsiveHeight(2),
   },
   msgContainer: {
+    flex:8,
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: responsiveWidth(5),
@@ -177,7 +170,7 @@ export const styles = StyleSheet.create({
   },
   timerText: {
     fontSize: responsiveFontSize(2.8),
-    color: 'black',
+    color: 'white',
     fontWeight: 'bold',
   },
 });
