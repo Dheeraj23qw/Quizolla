@@ -5,6 +5,7 @@ import Winner from '@/screens/WinnerScreen/Winner'
 import QuizDetailScreen from '@/screens/QuizDetailScreen/QuizDetailScreen'
 import Classes from '@/screens/Classes/classes'
 import QuizScreen from '@/screens/QuizScreen/QuizScreen'
+import RajaMantriGameScreen from '@/screens/RajaMantriGameScreen/RajaMantriGameScreen'
 
 export default function history() {
   return (
@@ -12,7 +13,7 @@ export default function history() {
     {/* <QuizDetailScreen/> */}
  {/* <ResultScreen/> */}
  {/* <Winner/> */}
-
+<RajaMantriGameScreen/>
     </>
   )
 }
