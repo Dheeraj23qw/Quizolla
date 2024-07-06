@@ -9,13 +9,15 @@ export const styles = StyleSheet.create({
     messageBox: {
       flex: 0.3,
       padding: 16,
-      backgroundColor: '#f9c2ff',
+      backgroundColor: '#8e44ad',
       alignItems: 'center',
       marginBottom: 20,
+      borderRadius: 20,
     },
     messageText: {
-      fontSize: 18,
-      fontWeight: 'bold',
+      fontSize: 23,
+      color:"white",
+      fontFamily:"myfont-bold"
     },
     playButton: {
       padding: 10,
@@ -26,8 +28,9 @@ export const styles = StyleSheet.create({
     },
     playButtonText: {
       color: '#fff',
-      fontSize: 18,
-      fontWeight: 'bold',
+      fontSize: 21,
+     fontFamily:"myfont-bold",
+     letterSpacing: 1,
     },
     playButtonDisabled: {
         backgroundColor: '#ccc', // Disabled button color
@@ -48,8 +51,8 @@ export const styles = StyleSheet.create({
     },
     cardText: {
       color: '#fff',
-      fontSize: 18,
-      fontWeight: 'bold',
+      fontSize: 20,
+      fontFamily:"myfont-bold"
     },
     cardImage: {
       width: 80,
@@ -70,10 +73,15 @@ export const styles = StyleSheet.create({
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      borderWidth: 0.6,
-      borderColor: '#ddd',
+      borderWidth: 1,
+      borderColor: '#8e44ad',
     },
     cellText: {
-      fontSize: 16,
+      fontSize: 20,
+      fontFamily:"myfont-bold"
     },
+    scrollView: {
+      flex: 1,
+    },
+
   });

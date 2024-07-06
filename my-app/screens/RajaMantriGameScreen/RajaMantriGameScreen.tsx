@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Animated, StatusB
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './styles';
 
-// Define the props interface for the RajaMantriGameScreen component
 interface RajaMantriGameScreenProps {}
 
 const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
@@ -21,15 +20,12 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
   const [round, setRound] = useState<number>(1);
   const [playerNames, setPlayerNames] = useState<string[]>(['John', 'Jerry', 'Jane', 'Jack']);
   const [policeClickCount, setPoliceClickCount] = useState<number>(0);
+  const [scores, setScores] = useState<number[]>([0, 0, 0, 0]); 
 
   useEffect(() => {
     resetGame();
   }, []);
 
-  useEffect(() => {
-    console.log(`LOG Current round: ${round}`);
-    console.log(`LOG Current message: ${message}`);
-  }, [round, message]); // Log round and message whenever they change
 
   const resetGame = () => {
     setFlipAnims(initialFlipAnims.map(() => new Animated.Value(0)));
@@ -38,8 +34,9 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
     setSelectedPlayer(1);
     setIsPlayButtonDisabled(false);
     setRound(1);
-    setMessage('Welcome! Choose one player to press the button.');
+    setMessage('Welcome !! Press the Button to Start the Game.');
     setPoliceClickCount(0);
+    setScores([0, 0, 0, 0]); // Reset scores for each player
   };
 
   const handlePlay = () => {
@@ -64,25 +61,24 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
     const playerName = playerNames[index];
     const playerRole = roles[index];
 
-    
-      // Police player logic
-      if (playerRole === 'Thief') {
-        setMessage(`Great job ${playerNames[selectedPlayer - 1]}! You found the Thief!`);
-        setTimeout(() => resetForNextRound(), 3000);
-      } else {
-        setPoliceClickCount((prevCount) => {
-          const newCount = prevCount + 1;
-          if (newCount === 2) {
-            revealAllCards();
-            setMessage(`Sorry ${playerNames[selectedPlayer - 1]}, you couldn't find the Thief. -200 points for this Round.`);
-            setTimeout(() => resetForNextRound(), 5000);
-          } else {
-            setMessage(`Not the Thief, ${playerNames[selectedPlayer - 1]}. Your 500 points will transfer to the Thief of this round. Choose wisely!`);
-          }
-          return newCount;
-        });
-      }
-    
+    if (playerRole === 'Thief') {
+      setMessage(`Great job ${playerNames[selectedPlayer - 1]}! You found the Thief!`);
+      updateScore(selectedPlayer - 1, 1000); // Update score for the player who found the Thief
+      setTimeout(() => resetForNextRound(), 3000);
+    } else {
+      setPoliceClickCount((prevCount) => {
+        const newCount = prevCount + 1;
+        if (newCount === 2) {
+          revealAllCards();
+          setMessage(`Sorry ${playerNames[selectedPlayer - 1]}, you couldn't find the Thief. -200 points for this Round.`);
+          updateScore(selectedPlayer - 1, -200); // Penalize the player who clicked incorrectly
+          setTimeout(() => resetForNextRound(), 5000);
+        } else {
+          setMessage(`Not the Thief, ${playerNames[selectedPlayer - 1]}. Your 500 points will transfer to the Thief of this round. Choose wisely!`);
+        }
+        return newCount;
+      });
+    }
 
     if (!flippedStates[index] && roles[index] !== 'Police' && !clickedCards[index]) {
       flipCard(index, 1, 500);
@@ -91,7 +87,6 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
         newClickedCards[index] = true;
         return newClickedCards;
       });
-      console.log(`Player ${playerName} clicked on their card.`);
     } else if (flippedStates[index] && roles[index] !== 'Police') {
       flipCard(index, 0, 500);
       setClickedCards((prev) => {
@@ -99,7 +94,6 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
         newClickedCards[index] = false;
         return newClickedCards;
       });
-      console.log(`Player ${playerName} flipped back their card.`);
     }
   };
 
@@ -196,6 +190,50 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
     return array;
   };
 
+  const updateScore = (playerIndex: number, scoreChange: number) => {
+    setScores((prevScores) => {
+      const newScores = [...prevScores];
+      newScores[playerIndex] += scoreChange;
+      return newScores;
+    });
+  };
+
+  const renderTable = () => {
+    const tableData = (
+      <>
+        {/* Header row */}
+        <View style={styles.tableRow}>
+          <View style={styles.tableCell}>
+            <Text style={styles.cellText}>Rounds</Text>
+          </View>
+    
+          {playerNames.map((name, index) => (
+            <View key={index} style={styles.tableCell}>
+              <Text style={styles.cellText}>{name}</Text>
+            </View>
+          ))}
+        </View>
+  
+        {/* Data rows for rounds and scores */}
+        {Array.from({ length: 10 }, (_, rowIndex) => (
+          <View key={rowIndex} style={styles.tableRow}>
+            <View style={styles.tableCell}>
+              <Text style={styles.cellText}>Round {rowIndex + 1}</Text>
+            </View>
+            {Array.from({ length: 4 }, (_, colIndex) => (
+              <View key={colIndex} style={styles.tableCell}>
+                <Text style={styles.cellText}>
+                  {scores[colIndex]}
+                </Text>
+              </View>
+            ))}
+          </View>
+        ))}
+      </>
+    );
+  
+    return <View style={styles.table}>{tableData}</View>;
+  };
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#BEA1FE" barStyle="dark-content" />
@@ -222,16 +260,8 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
           </TouchableOpacity>
         ))}
       </View>
-      <ScrollView style={styles.tableContainer} showsVerticalScrollIndicator={false}>
-        <View style={styles.table}>
-          {playerNames.map((name, index) => (
-            <View style={styles.tableRow} key={index}>
-              <View style={styles.tableCell}>
-                <Text style={styles.cellText}>{name}</Text>
-              </View>
-            </View>
-          ))}
-        </View>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        {renderTable()}
       </ScrollView>
     </SafeAreaView>
   );
