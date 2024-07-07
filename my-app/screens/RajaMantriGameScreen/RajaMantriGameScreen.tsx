@@ -92,80 +92,56 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
   };
 
   const handleCardClick = (index: number) => {
-    if(isPlayButtonDisabled == true ){
     const playerName = playerNames[index];
-    const playerRole = roles[index];
-
-    if (playerRole === "Thief") {
-      setMessage(
-        `Great detective work, ${policePlayerName}! You found the Thief! ${playerName} was the Thief this round, but you kept your cool! Keep it up!`
-      );
-      revealAllCards();
-      setTimeout(() => resetForNextRound(), 5000);
-    } else {
-      setPoliceClickCount((prevCount) => {
-        const newCount = prevCount + 1;
-        if (newCount === 2) {
-          revealAllCards();
-          setMessage(
-            `Oops, ${policePlayerName}, you couldn't find the Thief this time. Don't worry, you're still doing great! ${playerName} was the Thief and gets 500 points. Better luck next time!`
-          );
-          if (playerRole === "Thief") {
+    if (isPlayButtonDisabled) {
+     
+      const playerRole = roles[index];
+  
+      if (playerRole === "Thief") {
+        setMessage(
+          `Great detective work, ${policePlayerName}! You found the Thief! ${playerName} was the Thief of this round, but you kept your cool! Keep it up!`
+        );
+        revealAllCards();
+        setTimeout(() => resetForNextRound(), 8000);
+      } else {
+        setPoliceClickCount((prevCount) => {
+          const newCount = prevCount + 1;
+          if (newCount == 2) {
             setMessage(
-              `Great detective work, ${policePlayerName}! You found the Thief! ${playerName} was the Thief this round, but you kept your cool! Keep it up!`
-            );
-
-            setTimeout(() => resetForNextRound(), 9000);
+              `Oops, ${policePlayerName}, you couldn't find the Thief this time.The Thief and gets 500 points. Better luck next time!`); 
+            revealAllCards();
+            setTimeout(() => resetForNextRound(), 5000);
           } else {
-            setPoliceClickCount((prevCount) => {
-              const newCount = prevCount + 1;
-              if (newCount === 2) {
-                revealAllCards();
-                setMessage(
-                  `Oops, ${policePlayerName}, you couldn't find the Thief this time. Don't worry, you're still doing great! ${playerName} was the Thief and gets 500 points. Better luck next time!`
-                );
-                revealAllCards();
-                setTimeout(() => resetForNextRound(), 5000);
-              } else {
-                setMessage(
-                  `Keep trying, ${policePlayerName}! You're on the right track. Your 500 points will transfer to the Thief if you don't find them in your next attempt. Choose wisely!`
-                );
-              }
-              return newCount;
-            });
+            setMessage(
+              `Keep trying, ${policePlayerName}! You're on the right track. Your 500 points will transfer to the Thief if you don't find them in your next attempt. Choose wisely!`
+            );
           }
-
-          setTimeout(() => resetForNextRound(), 5000);
-        } else {
-          setMessage(
-            `Keep trying, ${policePlayerName}! You're on the right track. Your 500 points will transfer to the Thief if you don't find them in your next attempt. Choose wisely!`
-          );
-        }
-        return newCount;
-      });
+          return newCount;
+        });
+      }
+  
+      if (
+        !flippedStates[index] &&
+        roles[index] !== "Police" &&
+        !clickedCards[index]
+      ) {
+        flipCard(index, 1, 500);
+        setClickedCards((prev) => {
+          const newClickedCards = [...prev];
+          newClickedCards[index] = true;
+          return newClickedCards;
+        });
+      } else if (flippedStates[index] && roles[index] !== "Police") {
+        flipCard(index, 0, 500);
+        setClickedCards((prev) => {
+          const newClickedCards = [...prev];
+          newClickedCards[index] = false;
+          return newClickedCards;
+        });
+      }
     }
-
-    if (
-      !flippedStates[index] &&
-      roles[index] !== "Police" &&
-      !clickedCards[index]
-    ) {
-      flipCard(index, 1, 500);
-      setClickedCards((prev) => {
-        const newClickedCards = [...prev];
-        newClickedCards[index] = true;
-        return newClickedCards;
-      });
-    } else if (flippedStates[index] && roles[index] !== "Police") {
-      flipCard(index, 0, 500);
-      setClickedCards((prev) => {
-        const newClickedCards = [...prev];
-        newClickedCards[index] = false;
-        return newClickedCards;
-      });
-    }
-  }
   };
+  
 
   const flipCard = (index: number, toValue: number, duration: number) => {
     Animated.timing(flipAnims[index], {
