@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
       borderRadius: 20,
     },
     messageText: {
-      fontSize: 23,
+      fontSize: 16,
       color:"white",
       fontFamily:"myfont-bold"
     },
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
     },
     playButtonText: {
       color: '#fff',
-      fontSize: 21,
+      fontSize: 19,
      fontFamily:"myfont-bold",
      letterSpacing: 1,
     },
@@ -77,7 +77,7 @@ export const styles = StyleSheet.create({
       borderColor: '#8e44ad',
     },
     cellText: {
-      fontSize: 20,
+      fontSize: 15,
       fontFamily:"myfont-bold"
     },
     scrollView: {

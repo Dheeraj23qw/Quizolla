@@ -1,7 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Animated, StatusBar, Image } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { styles } from './styles';
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Animated,
+  StatusBar,
+  Image,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { styles } from "./styles";
 
 interface RajaMantriGameScreenProps {}
 
@@ -10,22 +19,48 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
   const initialClickedCards = [false, false, false, false];
   const initialFlipAnims = Array(4).fill(new Animated.Value(0));
 
-  const [flipAnims, setFlipAnims] = useState<Animated.Value[]>(initialFlipAnims);
-  const [flippedStates, setFlippedStates] = useState<boolean[]>(initialFlippedStates);
-  const [clickedCards, setClickedCards] = useState<boolean[]>(initialClickedCards);
+  const [flipAnims, setFlipAnims] =
+    useState<Animated.Value[]>(initialFlipAnims);
+  const [flippedStates, setFlippedStates] =
+    useState<boolean[]>(initialFlippedStates);
+  const [clickedCards, setClickedCards] =
+    useState<boolean[]>(initialClickedCards);
   const [selectedPlayer, setSelectedPlayer] = useState<number>(1);
-  const [message, setMessage] = useState<string>('Welcome! Choose one player to press the button.');
-  const [roles, setRoles] = useState<string[]>(['King', 'Advisor', 'Thief', 'Police']);
-  const [isPlayButtonDisabled, setIsPlayButtonDisabled] = useState<boolean>(false);
-  const [round, setRound] = useState<number>(1);
-  const [playerNames, setPlayerNames] = useState<string[]>(['John', 'Jerry', 'Jane', 'Jack']);
+  const [message, setMessage] = useState<string>(
+    ""
+  );
+  const [roles, setRoles] = useState<string[]>([
+    "King",
+    "Advisor",
+    "Thief",
+    "Police",
+  ]);
+  const [isPlayButtonDisabled, setIsPlayButtonDisabled] =
+    useState<boolean>(false);
+  const [round, setRound] = useState<number>(0);
+  const [playerNames, setPlayerNames] = useState<string[]>([
+    "Muskan",
+    "Simran",
+    "Lado",
+    "Baua",
+  ]);
   const [policeClickCount, setPoliceClickCount] = useState<number>(0);
-  const [scores, setScores] = useState<number[]>([0, 0, 0, 0]); 
+  const [policePlayerName, setPolicePlayerName] = useState<string | null>("");
+
+  const initialScores = [0, 0, 0, 0]; 
+  const [scores, setScores] = useState<number[]>(initialScores);
+
+  const updateScores = (playerIndex: number, points: number) => {
+    setScores((prevScores) => {
+      const newScores = [...prevScores];
+      newScores[playerIndex] += points;
+      return newScores;
+    });
+  };
 
   useEffect(() => {
     resetGame();
   }, []);
-
 
   const resetGame = () => {
     setFlipAnims(initialFlipAnims.map(() => new Animated.Value(0)));
@@ -33,10 +68,9 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
     setClickedCards(initialClickedCards);
     setSelectedPlayer(1);
     setIsPlayButtonDisabled(false);
-    setRound(1);
-    setMessage('Welcome !! Press the Button to Start the Game.');
+    setRound((count) => count + 1);
+    setMessage("Welcome !! Press the Button to Start the Game.");
     setPoliceClickCount(0);
-    setScores([0, 0, 0, 0]); // Reset scores for each player
   };
 
   const handlePlay = () => {
@@ -44,50 +78,85 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
     setSelectedPlayer(randomIndex + 1);
     setIsPlayButtonDisabled(true);
 
-    const shuffledRoles = shuffleArray(['King', 'Advisor', 'Thief', 'Police']);
+    const shuffledRoles = shuffleArray(["King", "Advisor", "Thief", "Police"]);
     setRoles(shuffledRoles);
 
-    const policeIndex = shuffledRoles.indexOf('Police');
+    const policeIndex = shuffledRoles.indexOf("Police");
     if (policeIndex !== -1) {
       const policePlayerName = playerNames[policeIndex];
-      const newMessage = `Player ${policePlayerName}, you are chosen for the Police role. Find out who is the Thief!`;
+      const newMessage = `${policePlayerName}, you are chosen for the Police role. Find out who is the Thief!`;
+      setPolicePlayerName(policePlayerName);
       setMessage(newMessage);
-
       flipCard(policeIndex, 1, 1800);
     }
   };
 
   const handleCardClick = (index: number) => {
+    if(isPlayButtonDisabled == true ){
     const playerName = playerNames[index];
     const playerRole = roles[index];
 
-    if (playerRole === 'Thief') {
-      setMessage(`Great job ${playerNames[selectedPlayer - 1]}! You found the Thief!`);
-      updateScore(selectedPlayer - 1, 1000); // Update score for the player who found the Thief
-      setTimeout(() => resetForNextRound(), 3000);
+    if (playerRole === "Thief") {
+      setMessage(
+        `Great detective work, ${policePlayerName}! You found the Thief! ${playerName} was the Thief this round, but you kept your cool! Keep it up!`
+      );
+      revealAllCards();
+      setTimeout(() => resetForNextRound(), 5000);
     } else {
       setPoliceClickCount((prevCount) => {
         const newCount = prevCount + 1;
         if (newCount === 2) {
           revealAllCards();
-          setMessage(`Sorry ${playerNames[selectedPlayer - 1]}, you couldn't find the Thief. -200 points for this Round.`);
-          updateScore(selectedPlayer - 1, -200); // Penalize the player who clicked incorrectly
+          setMessage(
+            `Oops, ${policePlayerName}, you couldn't find the Thief this time. Don't worry, you're still doing great! ${playerName} was the Thief and gets 500 points. Better luck next time!`
+          );
+          if (playerRole === "Thief") {
+            setMessage(
+              `Great detective work, ${policePlayerName}! You found the Thief! ${playerName} was the Thief this round, but you kept your cool! Keep it up!`
+            );
+
+            setTimeout(() => resetForNextRound(), 9000);
+          } else {
+            setPoliceClickCount((prevCount) => {
+              const newCount = prevCount + 1;
+              if (newCount === 2) {
+                revealAllCards();
+                setMessage(
+                  `Oops, ${policePlayerName}, you couldn't find the Thief this time. Don't worry, you're still doing great! ${playerName} was the Thief and gets 500 points. Better luck next time!`
+                );
+                revealAllCards();
+                setTimeout(() => resetForNextRound(), 5000);
+              } else {
+                setMessage(
+                  `Keep trying, ${policePlayerName}! You're on the right track. Your 500 points will transfer to the Thief if you don't find them in your next attempt. Choose wisely!`
+                );
+              }
+              return newCount;
+            });
+          }
+
           setTimeout(() => resetForNextRound(), 5000);
         } else {
-          setMessage(`Not the Thief, ${playerNames[selectedPlayer - 1]}. Your 500 points will transfer to the Thief of this round. Choose wisely!`);
+          setMessage(
+            `Keep trying, ${policePlayerName}! You're on the right track. Your 500 points will transfer to the Thief if you don't find them in your next attempt. Choose wisely!`
+          );
         }
         return newCount;
       });
     }
 
-    if (!flippedStates[index] && roles[index] !== 'Police' && !clickedCards[index]) {
+    if (
+      !flippedStates[index] &&
+      roles[index] !== "Police" &&
+      !clickedCards[index]
+    ) {
       flipCard(index, 1, 500);
       setClickedCards((prev) => {
         const newClickedCards = [...prev];
         newClickedCards[index] = true;
         return newClickedCards;
       });
-    } else if (flippedStates[index] && roles[index] !== 'Police') {
+    } else if (flippedStates[index] && roles[index] !== "Police") {
       flipCard(index, 0, 500);
       setClickedCards((prev) => {
         const newClickedCards = [...prev];
@@ -95,6 +164,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
         return newClickedCards;
       });
     }
+  }
   };
 
   const flipCard = (index: number, toValue: number, duration: number) => {
@@ -110,7 +180,8 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
       });
 
       const allNonPoliceFlipped = [...flippedStates].every(
-        (flipped, idx) => roles[idx] === 'Police' || clickedCards[idx] || index === idx
+        (flipped, idx) =>
+          roles[idx] === "Police" || clickedCards[idx] || index === idx
       );
       if (allNonPoliceFlipped) {
         setRound((prevRound) => prevRound + 1);
@@ -140,7 +211,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
       const newMessage = `Now round-${round} is started! Player ${selectedPlayer} is chosen to press the play button.`;
       setMessage(newMessage);
       setPoliceClickCount(0);
-      const newRoles = shuffleArray(['King', 'Advisor', 'Thief', 'Police']);
+      const newRoles = shuffleArray(["King", "Advisor", "Thief", "Police"]);
       setRoles(newRoles);
     }
   };
@@ -148,7 +219,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
   const flipInterpolate = (index: number) =>
     flipAnims[index].interpolate({
       inputRange: [0, 1],
-      outputRange: ['0deg', '7200deg'],
+      outputRange: ["0deg", "7200deg"],
     });
 
   const animatedStyle = (index: number) => ({
@@ -157,14 +228,14 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
 
   const renderRoleContent = (index: number) => {
     const roleImages: { [key: string]: any } = {
-      King: require('../../assets/images/chorsipahi/king.jpg'),
-      Advisor: require('../../assets/images/chorsipahi/advisor.jpg'),
-      Thief: require('../../assets/images/chorsipahi/thief.jpg'),
-      Police: require('../../assets/images/chorsipahi/police.jpg'),
+      King: require("../../assets/images/chorsipahi/king.jpg"),
+      Advisor: require("../../assets/images/chorsipahi/advisor.jpg"),
+      Thief: require("../../assets/images/chorsipahi/thief.jpg"),
+      Police: require("../../assets/images/chorsipahi/police.jpg"),
     };
 
     if (flippedStates[index]) {
-      if (roles[index] === 'Police') {
+      if (roles[index] === "Police") {
         return <Image source={roleImages.Police} style={styles.cardImage} />;
       } else {
         return (
@@ -190,14 +261,6 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
     return array;
   };
 
-  const updateScore = (playerIndex: number, scoreChange: number) => {
-    setScores((prevScores) => {
-      const newScores = [...prevScores];
-      newScores[playerIndex] += scoreChange;
-      return newScores;
-    });
-  };
-
   const renderTable = () => {
     const tableData = (
       <>
@@ -206,14 +269,14 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
           <View style={styles.tableCell}>
             <Text style={styles.cellText}>Rounds</Text>
           </View>
-    
+
           {playerNames.map((name, index) => (
             <View key={index} style={styles.tableCell}>
               <Text style={styles.cellText}>{name}</Text>
             </View>
           ))}
         </View>
-  
+
         {/* Data rows for rounds and scores */}
         {Array.from({ length: 10 }, (_, rowIndex) => (
           <View key={rowIndex} style={styles.tableRow}>
@@ -222,28 +285,34 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
             </View>
             {Array.from({ length: 4 }, (_, colIndex) => (
               <View key={colIndex} style={styles.tableCell}>
-                <Text style={styles.cellText}>
-                  {scores[colIndex]}
-                </Text>
+                <Text style={styles.cellText}>{0}</Text>
               </View>
             ))}
           </View>
         ))}
       </>
     );
-  
+
     return <View style={styles.table}>{tableData}</View>;
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#BEA1FE" barStyle="dark-content" />
       <View style={styles.messageBox}>
         <Text style={styles.messageText}>{message}</Text>
       </View>
-      <View style={[styles.playButton, isPlayButtonDisabled && styles.playButtonDisabled]}>
+      <View
+        style={[
+          styles.playButton,
+          isPlayButtonDisabled && styles.playButtonDisabled,
+        ]}
+      >
         <TouchableOpacity onPress={handlePlay} disabled={isPlayButtonDisabled}>
           <Text style={styles.playButtonText}>
-            {isPlayButtonDisabled ? `Round ${round}` : `Player ${selectedPlayer} Press to play!`}
+            {isPlayButtonDisabled
+              ? `Round ${round}`
+              : `Player ${selectedPlayer} Press to play!`}
           </Text>
         </TouchableOpacity>
       </View>
@@ -260,7 +329,10 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
           </TouchableOpacity>
         ))}
       </View>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+      >
         {renderTable()}
       </ScrollView>
     </SafeAreaView>
