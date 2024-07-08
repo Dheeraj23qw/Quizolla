@@ -26,9 +26,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
   const [clickedCards, setClickedCards] =
     useState<boolean[]>(initialClickedCards);
   const [selectedPlayer, setSelectedPlayer] = useState<number>(1);
-  const [message, setMessage] = useState<string>(
-    ""
-  );
+  const [message, setMessage] = useState<string>("");
   const [roles, setRoles] = useState<string[]>([
     "King",
     "Advisor",
@@ -37,7 +35,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
   ]);
   const [isPlayButtonDisabled, setIsPlayButtonDisabled] =
     useState<boolean>(false);
-  const [round, setRound] = useState<number>(0);
+
   const [playerNames, setPlayerNames] = useState<string[]>([
     "Muskan",
     "Simran",
@@ -50,7 +48,18 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
   const [kingIndex, setKingIndex] = useState<number | null>(null);
   const [advisorIndex, setAdvisorIndex] = useState<number | null>(null);
   const [thiefIndex, setThiefIndex] = useState<number | null>(null);
- 
+
+  const [playerScores, setPlayerScores] = useState<
+    Array<{ playerName: string; scores: number[] }>
+  >(
+    playerNames.map((name) => ({
+      playerName: name,
+      scores: Array.from({ length: 10 }, () => 0),
+    }))
+  );
+
+  const [round, setRound] = useState<number>(1);
+
   useEffect(() => {
     resetGame();
   }, []);
@@ -61,13 +70,19 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
     setClickedCards(initialClickedCards);
     setSelectedPlayer(1);
     setIsPlayButtonDisabled(false);
-    setRound((count) => count + 1);
+    setRound(1);
     setMessage("Welcome !! Press the Button to Start the Game.");
     setPoliceClickCount(0);
     setAdvisorIndex(null);
     setThiefIndex(null);
     setKingIndex(null);
     setPoliceIndex(null);
+    setPlayerScores(
+      playerNames.map((name) => ({
+        playerName: name,
+        scores: Array.from({ length: 10 }, () => 0),
+      }))
+    );
   };
 
   const handlePlay = () => {
@@ -91,10 +106,52 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
       flipCard(policeIndex, 1, 1800);
     }
   };
+  const updateScore = (
+    playerIndex: number,
+    newScore: number,
+    roundIndex: number
+  ) => {
+    setPlayerScores((prevScores) => {
+      // Ensure playerIndex is within bounds
+      if (playerIndex >= 0 && playerIndex < prevScores.length) {
+        const newPlayerScores = prevScores.map((player, index) => {
+          if (index === playerIndex) {
+            // Update the scores array with the new score at the specified roundIndex
+            const updatedScores = [...player.scores];
+            updatedScores[roundIndex] = newScore; // Update the score for the specified round
+            return {
+              ...player,
+              scores: updatedScores,
+            };
+          } else {
+            return player;
+          }
+        });
+  
+        // Log sums after updating scores
+        newPlayerScores.forEach((player) => {
+          const sum = player.scores.reduce((total, score) => total + score, 0);
+          if(round>8)
+          console.log(`Player ${player.playerName} - Round ${roundIndex + 1} Sum: ${sum}`);
+        });
+  
+        return newPlayerScores;
+      } else {
+        // If playerIndex is out of bounds, return previous state as is
+        return prevScores;
+      }
+    });
+  };
 
   const handleCardClick = (index: number) => {
     const playerName = playerNames[index];
-    if (isPlayButtonDisabled) {
+    if (
+      isPlayButtonDisabled &&
+      thiefIndex !== null &&
+      policeIndex !== null &&
+      advisorIndex !== null &&
+      kingIndex !== null
+    ) {
       const playerRole = roles[index];
 
       if (playerRole === "Thief" && thiefIndex !== null) {
@@ -102,7 +159,11 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
           `Great detective work, ${policePlayerName}! You found the Thief! ${playerNames[thiefIndex]} was the Thief of this round, but you kept your cool! Keep it up!`
         );
         revealAllCards();
-        setTimeout(() => resetForNextRound(), 8000);
+        updateScore(thiefIndex, 0, round - 1);
+        updateScore(policeIndex, 500, round - 1);
+        updateScore(advisorIndex, 800, round - 1);
+        updateScore(kingIndex, 1000, round - 1);
+        setTimeout(() => resetForNextRound(), 6000);
       } else {
         setPoliceClickCount((prevCount) => {
           const newCount = prevCount + 1;
@@ -111,6 +172,10 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
               `Oops, ${policePlayerName}, you couldn't find the Thief this time. ${playerNames[thiefIndex]} was the Thief of this round and gets 500 points. Better luck next time!`
             );
             revealAllCards();
+            updateScore(thiefIndex, 500, round - 1);
+            updateScore(policeIndex, 0, round - 1);
+            updateScore(advisorIndex, 800, round - 1);
+            updateScore(kingIndex, 1000, round - 1);
             setTimeout(() => resetForNextRound(), 5000);
           } else {
             setMessage(
@@ -180,6 +245,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
     if (round >= 10) {
       resetGame();
     } else {
+      setRound((count) => count + 1);
       setFlipAnims(initialFlipAnims.map(() => new Animated.Value(0)));
       setFlippedStates(initialFlippedStates);
       setClickedCards(initialClickedCards);
@@ -245,7 +311,6 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
           <View style={styles.tableCell}>
             <Text style={styles.cellText}>Rounds</Text>
           </View>
-
           {playerNames.map((name, index) => (
             <View key={index} style={styles.tableCell}>
               <Text style={styles.cellText}>{name}</Text>
@@ -259,9 +324,9 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
             <View style={styles.tableCell}>
               <Text style={styles.cellText}>Round {rowIndex + 1}</Text>
             </View>
-            {Array.from({ length: 4 }, (_, colIndex) => (
-              <View key={colIndex} style={styles.tableCell}>
-                <Text style={styles.cellText}>0</Text>
+            {playerScores.map((player, index) => (
+              <View key={index} style={styles.tableCell}>
+                <Text style={styles.cellText}>{player.scores[rowIndex]}</Text>
               </View>
             ))}
           </View>
@@ -271,7 +336,6 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
 
     return <View style={styles.table}>{tableData}</View>;
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#BEA1FE" barStyle="dark-content" />

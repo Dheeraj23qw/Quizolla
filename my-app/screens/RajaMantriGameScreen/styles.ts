@@ -77,7 +77,7 @@ export const styles = StyleSheet.create({
       borderColor: '#8e44ad',
     },
     cellText: {
-      fontSize: 15,
+      fontSize: 20,
       fontFamily:"myfont-bold"
     },
     scrollView: {
