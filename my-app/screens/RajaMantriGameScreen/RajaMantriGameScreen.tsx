@@ -46,18 +46,11 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
   ]);
   const [policeClickCount, setPoliceClickCount] = useState<number>(0);
   const [policePlayerName, setPolicePlayerName] = useState<string | null>("");
-
-  const initialScores = [0, 0, 0, 0]; 
-  const [scores, setScores] = useState<number[]>(initialScores);
-
-  const updateScores = (playerIndex: number, points: number) => {
-    setScores((prevScores) => {
-      const newScores = [...prevScores];
-      newScores[playerIndex] += points;
-      return newScores;
-    });
-  };
-
+  const [policeIndex, setPoliceIndex] = useState<number | null>(null);
+  const [kingIndex, setKingIndex] = useState<number | null>(null);
+  const [advisorIndex, setAdvisorIndex] = useState<number | null>(null);
+  const [thiefIndex, setThiefIndex] = useState<number | null>(null);
+ 
   useEffect(() => {
     resetGame();
   }, []);
@@ -71,15 +64,23 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
     setRound((count) => count + 1);
     setMessage("Welcome !! Press the Button to Start the Game.");
     setPoliceClickCount(0);
+    setAdvisorIndex(null);
+    setThiefIndex(null);
+    setKingIndex(null);
+    setPoliceIndex(null);
   };
 
   const handlePlay = () => {
     const randomIndex = Math.floor(Math.random() * 4);
     setSelectedPlayer(randomIndex + 1);
     setIsPlayButtonDisabled(true);
-
     const shuffledRoles = shuffleArray(["King", "Advisor", "Thief", "Police"]);
     setRoles(shuffledRoles);
+
+    setPoliceIndex(shuffledRoles.indexOf("Police"));
+    setKingIndex(shuffledRoles.indexOf("King"));
+    setAdvisorIndex(shuffledRoles.indexOf("Advisor"));
+    setThiefIndex(shuffledRoles.indexOf("Thief"));
 
     const policeIndex = shuffledRoles.indexOf("Police");
     if (policeIndex !== -1) {
@@ -94,21 +95,21 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
   const handleCardClick = (index: number) => {
     const playerName = playerNames[index];
     if (isPlayButtonDisabled) {
-     
       const playerRole = roles[index];
-  
-      if (playerRole === "Thief") {
+
+      if (playerRole === "Thief" && thiefIndex !== null) {
         setMessage(
-          `Great detective work, ${policePlayerName}! You found the Thief! ${playerName} was the Thief of this round, but you kept your cool! Keep it up!`
+          `Great detective work, ${policePlayerName}! You found the Thief! ${playerNames[thiefIndex]} was the Thief of this round, but you kept your cool! Keep it up!`
         );
         revealAllCards();
         setTimeout(() => resetForNextRound(), 8000);
       } else {
         setPoliceClickCount((prevCount) => {
           const newCount = prevCount + 1;
-          if (newCount == 2) {
+          if (newCount == 2 && thiefIndex !== null) {
             setMessage(
-              `Oops, ${policePlayerName}, you couldn't find the Thief this time.The Thief and gets 500 points. Better luck next time!`); 
+              `Oops, ${policePlayerName}, you couldn't find the Thief this time. ${playerNames[thiefIndex]} was the Thief of this round and gets 500 points. Better luck next time!`
+            );
             revealAllCards();
             setTimeout(() => resetForNextRound(), 5000);
           } else {
@@ -119,7 +120,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
           return newCount;
         });
       }
-  
+
       if (
         !flippedStates[index] &&
         roles[index] !== "Police" &&
@@ -141,7 +142,6 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
       }
     }
   };
-  
 
   const flipCard = (index: number, toValue: number, duration: number) => {
     Animated.timing(flipAnims[index], {
@@ -261,7 +261,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
             </View>
             {Array.from({ length: 4 }, (_, colIndex) => (
               <View key={colIndex} style={styles.tableCell}>
-                <Text style={styles.cellText}>{0}</Text>
+                <Text style={styles.cellText}>0</Text>
               </View>
             ))}
           </View>
@@ -288,7 +288,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
           <Text style={styles.playButtonText}>
             {isPlayButtonDisabled
               ? `Round ${round}`
-              : `Player ${selectedPlayer} Press to play!`}
+              : `${playerNames[Math.floor(Math.random() * 4)]} Press to play!`}
           </Text>
         </TouchableOpacity>
       </View>

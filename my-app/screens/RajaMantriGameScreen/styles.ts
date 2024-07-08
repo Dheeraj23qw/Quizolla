@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
       borderRadius: 20,
     },
     messageText: {
-      fontSize: 16,
+      fontSize: 20,
       color:"white",
       fontFamily:"myfont-bold"
     },
