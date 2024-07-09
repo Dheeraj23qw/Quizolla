@@ -1,49 +1,50 @@
 import { StyleSheet } from "react-native";
+import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions';
 
 export const styles = StyleSheet.create({
     container: {
       flex: 1,
-      padding: 16,
+      padding: responsiveWidth(4),
       backgroundColor: '#fff',
     },
     messageBox: {
       flex: 0.3,
-      padding: 16,
+      padding: responsiveWidth(4),
       backgroundColor: '#8e44ad',
       alignItems: 'center',
-      marginBottom: 20,
-      borderRadius: 20,
+      marginBottom: responsiveHeight(2.5),
+      borderRadius: responsiveWidth(5),
     },
     messageText: {
-      fontSize: 20,
-      color:"white",
-      fontFamily:"myfont-bold"
+      fontSize: responsiveFontSize(2.5),
+      color: "white",
+      fontFamily: "myfont-bold"
     },
     playButton: {
-      padding: 10,
+      padding: responsiveWidth(2.5),
       backgroundColor: '#8e44ad',
       alignItems: 'center',
-      marginBottom: 20,
-      borderRadius: 10,
+      marginBottom: responsiveHeight(2.5),
+      borderRadius: responsiveWidth(2.5),
     },
     playButtonText: {
       color: '#fff',
-      fontSize: 19,
-     fontFamily:"myfont-bold",
-     letterSpacing: 1,
+      fontSize: responsiveFontSize(2.4),
+      fontFamily: "myfont-bold",
+      letterSpacing: 1,
     },
     playButtonDisabled: {
-        backgroundColor: '#ccc', // Disabled button color
-      },
+      backgroundColor: '#ccc', // Disabled button color
+    },
     cardRow: {
       flexDirection: 'row',
       justifyContent: 'space-around',
-      marginBottom: 20,
+      marginBottom: responsiveHeight(2.5),
     },
     card: {
-      width: 80,
-      height: 80,
-      borderRadius: 40,
+      width: responsiveWidth(20),
+      height: responsiveWidth(20),
+      borderRadius: responsiveWidth(10),
       backgroundColor: '#8e44ad',
       alignItems: 'center',
       justifyContent: 'center',
@@ -51,13 +52,13 @@ export const styles = StyleSheet.create({
     },
     cardText: {
       color: '#fff',
-      fontSize: 20,
-      fontFamily:"myfont-bold"
+      fontSize: responsiveFontSize(2.5),
+      fontFamily: "myfont-bold"
     },
     cardImage: {
-      width: 80,
-      height: 80,
-      borderRadius: 40,
+      width: responsiveWidth(20),
+      height: responsiveWidth(20),
+      borderRadius: responsiveWidth(10),
     },
     tableContainer: {
       flex: 1,
@@ -77,11 +78,10 @@ export const styles = StyleSheet.create({
       borderColor: '#8e44ad',
     },
     cellText: {
-      fontSize: 20,
-      fontFamily:"myfont-bold"
+      fontSize: responsiveFontSize(2.5),
+      fontFamily: "myfont-bold"
     },
     scrollView: {
       flex: 1,
     },
-
-  });
+});

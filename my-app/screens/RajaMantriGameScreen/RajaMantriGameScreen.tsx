@@ -144,6 +144,10 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
   };
 
   const handleCardClick = (index: number) => {
+    if (!isPlayButtonDisabled || flippedStates[index] || clickedCards[index]) {
+      return;
+    }
+  
     const playerName = playerNames[index];
     if (
       isPlayButtonDisabled &&
@@ -153,7 +157,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
       kingIndex !== null
     ) {
       const playerRole = roles[index];
-
+  
       if (playerRole === "Thief" && thiefIndex !== null) {
         setMessage(
           `Great detective work, ${policePlayerName}! You found the Thief! ${playerNames[thiefIndex]} was the Thief of this round, but you kept your cool! Keep it up!`
@@ -185,7 +189,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
           return newCount;
         });
       }
-
+  
       if (
         !flippedStates[index] &&
         roles[index] !== "Police" &&
@@ -207,6 +211,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
       }
     }
   };
+  
 
   const flipCard = (index: number, toValue: number, duration: number) => {
     Animated.timing(flipAnims[index], {
