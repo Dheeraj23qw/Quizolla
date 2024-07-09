@@ -131,7 +131,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
         // Log sums after updating scores
         newPlayerScores.forEach((player) => {
           const sum = player.scores.reduce((total, score) => total + score, 0);
-          if(round>8)
+          if(round==10)
           console.log(`Player ${player.playerName} - Round ${roundIndex + 1} Sum: ${sum}`);
         });
   
