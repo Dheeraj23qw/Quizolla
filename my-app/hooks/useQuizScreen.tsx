@@ -1,6 +1,8 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'expo-router';
 import { questions } from '@/constants/question';
+import { Audio } from 'expo-av';
 
 const useQuiz = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -15,6 +17,9 @@ const useQuiz = () => {
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
   const [timeLeft, setTimeLeft] = useState<number>(10);
   const [timerKey, setTimerKey] = useState<number>(0);
+  const [thinkingSound, setThinkingSound] = useState<Audio.Sound | null>(null);
+  const [correctSound, setCorrectSound] = useState<Audio.Sound | null>(null);
+  const [wrongSound, setWrongSound] = useState<Audio.Sound | null>(null);
 
   const limitedQuestions = questions.slice(0, 5);
 
@@ -26,8 +31,14 @@ const useQuiz = () => {
 
   const router = useRouter();
 
+    const stopSound = async () => {
+    if (thinkingSound) {
+      await thinkingSound.stopAsync();
+    }
+  };
   useEffect(() => {
     if (correctAnswers === limitedQuestions.length) {
+      stopSound(); // Stop any playing sounds
       router.push({
         pathname: '/winner',
         params: {
@@ -36,11 +47,20 @@ const useQuiz = () => {
         },
       });
     }
-  }, [correctAnswers]);
+  }, [correctAnswers, router, stopSound]);
+  
 
   useEffect(() => {
     if (selectedAnswer && selectedAnswer !== correctAnswer) {
+  
+  
+        stopSound();
+        playWrongSound();
+      
+
+      
       const timer = setTimeout(() => {
+        stopSound();
         router.push({
           pathname: '/winner',
           params: {
@@ -50,7 +70,21 @@ const useQuiz = () => {
         });
       }, 2000);
       return () => clearTimeout(timer);
-    }
+    } else if (selectedAnswer && selectedAnswer === correctAnswer) {
+  
+    
+       
+          stopSound();
+          playCorrectSound();
+          setTimeout(() => {
+            playThinkingSound();
+          
+          }, 2000);
+        
+  
+      }
+     
+ 
   }, [selectedAnswer]);
 
   useEffect(() => {
@@ -59,7 +93,56 @@ const useQuiz = () => {
     }
   }, [timeLeft]);
 
+  useEffect(() => {
+    loadSounds();
+    return () => {
+      if (thinkingSound) {
+        thinkingSound.unloadAsync();
+      }
+      if (correctSound) {
+        correctSound.unloadAsync();
+      }
+      if (wrongSound) {
+        wrongSound.unloadAsync();
+      }
+    };
+  }, []);
+
+  const loadSounds = async () => {
+    const [thinking, correct, wrong] = await Promise.all([
+      Audio.Sound.createAsync(require('@/assets/audio/QuizScreen/thinking.mp3')),
+      Audio.Sound.createAsync(require('@/assets/audio/QuizScreen/correct.mp3')),
+      Audio.Sound.createAsync(require('@/assets/audio/QuizScreen/wrong.mp3')),
+    ]);
+    setThinkingSound(thinking.sound);
+    setCorrectSound(correct.sound);
+    setWrongSound(wrong.sound);
+    await thinking.sound.playAsync();
+    thinking.sound.setIsLoopingAsync(true);
+  };
+
+
+
+  const playCorrectSound = async () => {
+    if (correctSound) {
+      await correctSound.replayAsync();
+    }
+  };
+
+  const playWrongSound = async () => {
+    if (wrongSound) {
+      await wrongSound.replayAsync();
+    }
+  };
+
+  const playThinkingSound = async () => {
+    if (thinkingSound) {
+      await thinkingSound.playAsync();
+    }
+  };
+
   const handleTimeUp = useCallback(() => {
+    stopSound();
     if (correctAnswers < limitedQuestions.length && !selectedAnswer) {
       router.push({
         pathname: '/winner',
@@ -69,7 +152,7 @@ const useQuiz = () => {
         },
       });
     }
-  }, [correctAnswers, selectedAnswer]);
+  }, [correctAnswers, selectedAnswer, stopSound]);
 
   const useLifeline = useCallback((lifeline: string) => {
     if (lifeline === 'Hint' && !usedHint) {
@@ -113,6 +196,7 @@ const useQuiz = () => {
           moveToNextQuestion();
           setCurrentQuestionIndex((prevIndex) => (prevIndex + 1) % limitedQuestions.length);
           setCorrectAnswers((prev) => prev + 1);
+          playThinkingSound();
         }, 2000);
       }
     }
@@ -128,7 +212,10 @@ const useQuiz = () => {
     setFlippedQuestionIndex(null);
     setTimeLeft(10);
     setTimerKey((prevKey) => prevKey + 1);
+   
   }, [flippedQuestionIndex]);
+
+
 
   return {
     currentQuestion,
