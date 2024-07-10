@@ -54,4 +54,10 @@ export const globalstyles = StyleSheet.create({
     fontSize: responsiveFontSize(2.6),
     fontFamily: "myfont-bold",
   },
+  imageBackground: {
+    flex: 1,
+    resizeMode: 'cover', // Ensures the background image covers the entire area
+    backgroundColor: 'rgba(0, 0, 0, 1)', // Adds a semi-transparent overlay
+    opacity: 0.95,
+  }
 });

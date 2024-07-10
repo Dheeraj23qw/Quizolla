@@ -55,7 +55,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
         buttonText={
           isPlayButtonDisabled
             ? `Round ${round}`
-            : `${playerNames[Math.floor(Math.random() * 4)]} Press to play!`
+            : `Press to play!`
         }
       />
       <View style={styles.cardRow}>

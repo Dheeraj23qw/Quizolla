@@ -39,17 +39,32 @@ export const styles = StyleSheet.create({
 
   questionContainer: {
     paddingHorizontal: responsiveWidth(5),
-    paddingTop: responsiveHeight(3),
+    paddingVertical: responsiveHeight(3),
+    marginTop:responsiveHeight(3),
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#87CEEB',
+    shadowColor: '#4682B4',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+    overflow: 'hidden',
   },
+  
+  
   questionNumber: {
     fontSize: responsiveFontSize(2.2),
     fontWeight: "bold",
     color: "#212529",
   },
   questionText: {
-    fontSize: responsiveFontSize(2),
+    fontSize: responsiveFontSize(2.2),
     color: "#212529",
     marginTop: responsiveHeight(1),
+   
+    fontFamily:'outfit-bold'
   },
   optionsContainer: {
     paddingHorizontal: responsiveWidth(5),
@@ -61,15 +76,16 @@ export const styles = StyleSheet.create({
     marginBottom: responsiveHeight(2),
     paddingVertical: responsiveHeight(1.5),
     paddingHorizontal: responsiveWidth(3),
-    borderWidth: 1,
-    borderColor: "#dee2e6",
-    borderRadius: 5,
+ 
+    borderRadius: 15,
     backgroundColor: "#ffffff",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
+    elevation: 5,
+    shadowColor: '#B22222',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    borderColor: '#87CEEB',
+    borderWidth: 3,
   },
   optionLabel: {
     fontSize: responsiveFontSize(2),
@@ -80,6 +96,7 @@ export const styles = StyleSheet.create({
   optionText: {
     fontSize: responsiveFontSize(2),
     color: "#495057",
+     fontFamily:'outfit-bold'
   },
 
 

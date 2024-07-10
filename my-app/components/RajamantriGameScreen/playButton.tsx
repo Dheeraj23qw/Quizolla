@@ -1,8 +1,7 @@
 // PlayButton.tsx
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import { styles } from "@/screens/RajaMantriGameScreen/styles";
-import { View } from "react-native";
 
 interface PlayButtonProps {
   disabled: boolean;
@@ -12,11 +11,11 @@ interface PlayButtonProps {
 
 const PlayButton: React.FC<PlayButtonProps> = ({ disabled, onPress, buttonText }) => {
   return (
-    <View style={[styles.playButton, disabled && styles.playButtonDisabled]}>
-      <TouchableOpacity onPress={onPress} disabled={disabled}>
+    <Pressable onPress={onPress} disabled={disabled}>
+      <View style={[styles.playButton, disabled && styles.playButtonDisabled]}>
         <Text style={styles.playButtonText}>{buttonText}</Text>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </Pressable>
   );
 };
 
