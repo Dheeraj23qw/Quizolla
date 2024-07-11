@@ -30,6 +30,7 @@ const QuizScreen: React.FC<QuizScreenProps> = ({name}) => {
     handleOptionPress,
     useLifeline,
     handleTimeUp,
+    isPlaying
   } = useQuiz();
 
   return (
@@ -44,6 +45,7 @@ const QuizScreen: React.FC<QuizScreenProps> = ({name}) => {
             correctAnswer={selectedAnswer === currentQuestion.correctAnswer}
             key={timerKey}
             name={name}
+            isPlaying={isPlaying}
           />
           <View style={[globalstyles.Container2, { flex: 10 }]}>
           <ImageBackground

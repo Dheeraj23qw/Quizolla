@@ -1,23 +1,26 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { styles } from '@/screens/QuizScreen/QuizscreenCss';
 import { Ionicons } from '@expo/vector-icons'
 import {  responsiveScreenFontSize } from 'react-native-responsive-dimensions'
+import useQuiz from '@/hooks/useQuizScreen';
+
 interface HeaderComponentProps {
   onTimeUp: () => void;
   correctAnswer: boolean;
   name: string;
+  isPlaying: boolean;
 }
 
 const HeaderComponent: React.FC<HeaderComponentProps> = ({
   onTimeUp,
   correctAnswer,
-  name
+  name,isPlaying
 }) => {
   const [key, setKey] = useState(0);
+
 
   useEffect(() => {
     if (correctAnswer) {
@@ -43,8 +46,8 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
       <View style={headerStyles.timerContainer}>
         <CountdownCircleTimer
           key={key}
-          isPlaying
-          duration={10}
+          isPlaying={isPlaying}
+          duration={20}
           size={responsiveFontSize(9)}
           strokeWidth={responsiveFontSize(0.7)}
           colors={['#00FF00', '#FFFF00', '#FFA500', '#FF0000']} 
