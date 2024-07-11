@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'expo-router';
 import { questions } from '@/constants/question';
 import { Audio } from 'expo-av';
-import useQuizSoundManager from '@/sounds/QuizSound';
+import useQuizSoundManager from './useQuizSound';
 
 const useQuiz = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
