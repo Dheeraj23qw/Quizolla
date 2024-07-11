@@ -143,7 +143,7 @@ export const winnerstyles = StyleSheet.create({
     marginHorizontal: responsiveHeight(1),
     maxWidth: responsiveWidth(30),
     minWidth: responsiveWidth(20),
-    backgroundColor: '#1E90FF', // Tomato background color
+    backgroundColor: '#BEA1FE', // Tomato background color
     borderColor: '#32CD32', // OrangeRed border color
     borderWidth: 1.5,
     shadowColor: "#000",
