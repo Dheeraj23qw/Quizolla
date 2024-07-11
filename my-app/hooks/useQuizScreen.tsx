@@ -1,8 +1,6 @@
-// useQuiz.ts
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'expo-router';
 import { questions } from '@/constants/question';
-import { Audio } from 'expo-av';
 import useQuizSoundManager from './useQuizSound';
 
 const useQuiz = () => {
@@ -26,7 +24,7 @@ const useQuiz = () => {
     playThinkingSound,
     stopSound,
     unloadSounds,
-  } = useQuizSoundManager(); 
+  } = useQuizSoundManager();
 
   const limitedQuestions = questions.slice(0, 5);
 
@@ -47,7 +45,8 @@ const useQuiz = () => {
 
   useEffect(() => {
     if (correctAnswers === limitedQuestions.length) {
-      stopSound(); // Stop any playing sounds
+      console.log("All questions answered correctly. Moving to winner screen.");
+      stopSound();
       router.push({
         pathname: '/winner',
         params: {
@@ -60,6 +59,7 @@ const useQuiz = () => {
 
   useEffect(() => {
     if (selectedAnswer && selectedAnswer !== correctAnswer) {
+      console.log("Wrong answer selected. Moving to winner screen.");
       stopSound();
       playWrongSound();
       const timer = setTimeout(() => {
@@ -74,23 +74,29 @@ const useQuiz = () => {
       }, 2000);
       return () => clearTimeout(timer);
     } else if (selectedAnswer && selectedAnswer === correctAnswer) {
+      console.log("Correct answer selected. Playing correct sound.");
       stopSound();
       playCorrectSound();
       setTimeout(() => {
-        playThinkingSound();
+        if (correctAnswers < limitedQuestions.length - 1) {
+          playThinkingSound();
+        }
       }, 2000);
     }
-  }, [selectedAnswer, correctAnswer, stopSound, playWrongSound, playCorrectSound, playThinkingSound]);
+  }, [selectedAnswer, correctAnswer, correctAnswers, stopSound, playWrongSound, playCorrectSound, playThinkingSound]);
 
   useEffect(() => {
     if (timeLeft === 0) {
+      console.log("Time up for the current question. Handling time up.");
       handleTimeUp();
     }
   }, [timeLeft]);
 
   const handleTimeUp = useCallback(() => {
+    console.log("Handling time up scenario.");
     stopSound();
     if (correctAnswers < limitedQuestions.length && !selectedAnswer) {
+      console.log("Time up and question not answered. Moving to winner screen.");
       router.push({
         pathname: '/winner',
         params: {
@@ -101,9 +107,8 @@ const useQuiz = () => {
     }
   }, [correctAnswers, selectedAnswer, stopSound, router, limitedQuestions]);
 
-
-
   const flipQuestion = useCallback(() => {
+    console.log("Flipping question.");
     let newQuestionIndex;
     const usedQuestionIds = skippedQuestions.map(index => limitedQuestions[index].id).concat(limitedQuestions[currentQuestionIndex].id);
 
@@ -120,6 +125,7 @@ const useQuiz = () => {
   }, [currentQuestionIndex, limitedQuestions, skippedQuestions]);
 
   const useLifeline = useCallback((lifeline: string) => {
+    console.log(`Using lifeline: ${lifeline}`);
     if (lifeline === 'Hint' && !usedHint) {
       setUsedHint(true);
       setHint(questionHint);
@@ -137,9 +143,8 @@ const useQuiz = () => {
     }
   }, [usedHint, usedFiftyFifty, usedFlip, questionHint, options, correctAnswer, flipQuestion]);
 
-
-
   const moveToNextQuestion = useCallback(() => {
+    console.log("Moving to next question.");
     if (flippedQuestionIndex !== null) {
       setSkippedQuestions((prevSkippedQuestions) => [...prevSkippedQuestions, flippedQuestionIndex]);
     }
@@ -152,6 +157,7 @@ const useQuiz = () => {
   }, [flippedQuestionIndex]);
 
   const handleOptionPress = useCallback((option: string) => {
+    console.log(`Option "${option}" selected.`);
     if (!selectedAnswer) {
       setSelectedAnswer(option);
       if (option === correctAnswer) {
@@ -163,7 +169,7 @@ const useQuiz = () => {
         }, 2000);
       }
     }
-  }, [selectedAnswer, correctAnswer, moveToNextQuestion, limitedQuestions, playThinkingSound]);
+  }, [selectedAnswer, correctAnswer, correctAnswers, moveToNextQuestion, limitedQuestions.length, playThinkingSound]);
 
   return {
     currentQuestion,
