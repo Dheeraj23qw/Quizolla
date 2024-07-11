@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { ImageBackground, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { globalstyles } from "@/styles/global";
 import Msg from "@/components/winnerScreen/msg";
@@ -21,11 +21,16 @@ const Winner: React.FC<WinnerProps> = ({ correctAnswers, isWinner }) => {
     <SafeAreaView style={globalstyles.container}>
       <ScreenHeader name={isWinnerBool ? "Congratulations !!" : "Oops!! You Lose!"} />
       <View style={[globalstyles.Container2, { flex: 10 }]}>
+       <ImageBackground
+            source={require('@/assets/images/bg/mybg.jpg')} 
+             style={globalstyles.imageBackground}
+          >
         <Photo isWinner={isWinnerBool} />
         {/* Ensure correctAnswers is correctly passed to Score */}
         <Score correctAnswers={correctAnswers} />
         <Msg isWinner={isWinnerBool} />
         <Button />
+        </ImageBackground>
       </View>
     </SafeAreaView>
   );

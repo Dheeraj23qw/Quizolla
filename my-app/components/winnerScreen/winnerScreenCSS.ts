@@ -2,21 +2,21 @@ import { StyleSheet } from "react-native";
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from "react-native-responsive-dimensions";
 
 export const winnerstyles = StyleSheet.create({
-
-  // photo container css starts from here
-
+  // Photo container styles
   photoContainer: {
-    flex: 0.7,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
     paddingVertical: responsiveHeight(1),
+    backgroundColor: "rgba(0,0,0,0)",
   },
   photoCard: {
-    height: responsiveHeight(25),
-    width: responsiveHeight(25),
+    height: responsiveHeight(20),
+    width: responsiveHeight(20),
     borderRadius: responsiveHeight(12.5),
     overflow: 'hidden',
+    borderColor: '#FFD700', // Gold border
+    borderWidth: 2,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -26,6 +26,7 @@ export const winnerstyles = StyleSheet.create({
     shadowRadius: 3.4,
     elevation: 5,
   },
+  // Overlay styles
   overlay: {
     width: "100%",
     height: "100%",
@@ -33,10 +34,12 @@ export const winnerstyles = StyleSheet.create({
     alignItems: 'center',
   },
   circularImage: {
-    height: responsiveHeight(35),
-    width: responsiveHeight(35),
+    height: responsiveHeight(30),
+    width: responsiveHeight(30),
     borderRadius: responsiveHeight(17.5),
     overflow: 'hidden',
+    borderColor: '#FF4500', // OrangeRed border
+    borderWidth: 3,
   },
   congratulationMessage: {
     fontSize: responsiveFontSize(3.2),
@@ -46,14 +49,13 @@ export const winnerstyles = StyleSheet.create({
     paddingHorizontal: responsiveHeight(1.4),
   },
 
-  // score container css starts from here
-
+  // Score container styles
   scoreContainer: {
-    flex:0.5,
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginVertical: responsiveHeight(1),
+    paddingVertical: responsiveHeight(1), // Use padding instead of margin for gap
   },
   scoreCard: {
     backgroundColor: '#fff',
@@ -61,6 +63,8 @@ export const winnerstyles = StyleSheet.create({
     padding: responsiveHeight(2),
     alignItems: 'center',
     justifyContent: 'center',
+    borderColor: '#1E90FF', // DodgerBlue border
+    borderWidth: 2,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -69,8 +73,7 @@ export const winnerstyles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    width: '28%',
-    height: responsiveHeight(15),
+    height: "70%", // Adjusted for better consistency
   },
   scoreTitle: {
     fontSize: responsiveFontSize(1.6),
@@ -89,20 +92,21 @@ export const winnerstyles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(2),
   },
 
-  // motivational container styles
-  
+  // Motivational container styles
   motivationContainer: {
-    flex: 0.34,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(0,0,0,0)",
   },
-  motivationCard:{
+  motivationCard: {
     backgroundColor: '#fff',
     borderRadius: responsiveHeight(1),
     padding: responsiveHeight(2),
     alignItems: 'center',
     justifyContent: 'center',
+    borderColor: '#32CD32', // LimeGreen border
+    borderWidth: 2,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -111,43 +115,50 @@ export const winnerstyles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 3,
-    width: '95%',
-    height: '100%',
+    width: '90%',
+    height: '60%',
   },
-  motivationalMessage:{
+  motivationalMessage: {
     fontSize: responsiveFontSize(2.5),
     fontFamily: "outfit-bold",
     color: "black",
     marginTop: responsiveHeight(1.5),
   },
 
-  // button styles starts from here
-
+  // Button styles
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginVertical: responsiveHeight(1),
+    paddingVertical: responsiveHeight(1), // Use padding instead of margin for gap
     paddingHorizontal: responsiveHeight(2),
     paddingBottom: responsiveHeight(2),
   },
   button: {
-    flex: 1, 
-    borderColor: 'black',
-    borderWidth: 1.3,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: responsiveHeight(1.5),
-    paddingVertical: responsiveHeight(1), 
-    marginHorizontal: responsiveHeight(1), 
-    maxWidth: responsiveWidth(30), 
+    paddingVertical: responsiveHeight(1),
+    marginHorizontal: responsiveHeight(1),
+    maxWidth: responsiveWidth(30),
     minWidth: responsiveWidth(20),
-    fontFamily: 'myfont-bold',
-     
+    backgroundColor: '#1E90FF', // Tomato background color
+    borderColor: '#32CD32', // OrangeRed border color
+    borderWidth: 1.5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+
   },
   buttonText: {
     fontSize: responsiveFontSize(3),
     fontFamily: 'myfont',
+    color: '#FFFFFF', // White text color
   },
-
 });

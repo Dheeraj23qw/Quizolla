@@ -57,7 +57,7 @@ export const globalstyles = StyleSheet.create({
   imageBackground: {
     flex: 1,
     resizeMode: 'cover', // Ensures the background image covers the entire area
-    backgroundColor: 'rgba(0, 0, 0, 1)', // Adds a semi-transparent overlay
+    backgroundColor: 'rgba(0, 0, 0, 0.2)', // Adds a semi-transparent overlay
     opacity: 0.95,
   }
 });
