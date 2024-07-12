@@ -58,6 +58,8 @@ const useQuiz = (): QuizState => {
   const currentQuestion = flippedQuestionIndex !== null
     ? limitedQuestions[flippedQuestionIndex]
     : limitedQuestions[currentQuestionIndex];
+
+
   const { question, options, correctAnswer, hint: questionHint } = currentQuestion;
 
   const router = useRouter();
@@ -72,28 +74,25 @@ const useQuiz = (): QuizState => {
     };
   }, []);
 
-  // Check if 5 questions are answered correctly to move to winner screen
+  
   useEffect(() => {
-    if (correctAnswers === 5) {
+    if (correctAnswers === 5 && selectedAnswer !== null) {
       console.log("All 5 questions answered correctly. Moving to winner screen.");
       stopSound();
       setIsPlaying(false);
-      
-      setTimeout(() => {
+  
+      const timer = setTimeout(() => {
         router.push({
           pathname: '/winner',
           params: {
-            correctAnswers: 5,
+            correctAnswers:5,
             isWinner: "true",
           },
         });
       }, 2000);
-    }
-  }, [correctAnswers, router, stopSound, setIsPlaying]);
 
-  // Handle correct answer selected
-  useEffect(() => {
-    if (selectedAnswer === correctAnswer) {
+      return () => clearTimeout(timer);
+    } else if (selectedAnswer === correctAnswer && correctAnswers < 5 && selectedAnswer !== null) {
       console.log("Correct answer selected. Playing correct sound.");
       stopSound();
       playCorrectSound();
@@ -103,7 +102,18 @@ const useQuiz = (): QuizState => {
         }
       }, 2000);
     }
-  }, [selectedAnswer, correctAnswer, correctAnswers, limitedQuestions, stopSound, playCorrectSound, playThinkingSound]);
+  }, [
+    correctAnswers, 
+    router, 
+    stopSound, 
+    setIsPlaying, 
+    selectedAnswer, 
+    correctAnswer, 
+    limitedQuestions, 
+    playCorrectSound, 
+    playThinkingSound
+  ]);
+  
 
   // Handle wrong answer selected
   useEffect(() => {
@@ -195,35 +205,15 @@ const moveToNextQuestion = useCallback(() => {
   setFiftyFiftyOptions([]);
   setFlippedQuestionIndex(null);
   
+  setCorrectAnswers(prev => prev + 1);
   setTimerKey(prevKey => prevKey + 1);
 
   // Increment current question index and handle looping back to start
   setCurrentQuestionIndex(prevIndex => (prevIndex + 1) % limitedQuestions.length);
 
-  // Increment correct answers if the selected answer is correct
-  if (selectedAnswer === correctAnswer) {
-    setCorrectAnswers(prev => prev + 1);
-  }
-}, [selectedAnswer, correctAnswer, limitedQuestions.length]);
+}, [selectedAnswer, correctAnswer, limitedQuestions.length,correctAnswers]);
 
-// Effect to handle moving to winner screen when 5 correct answers are reached
-useEffect(() => {
-  if (correctAnswers === 5) {
-    console.log("All 5 questions answered correctly. Moving to winner screen.");
-    stopSound();
-    setIsPlaying(false);
-    
-    setTimeout(() => {
-      router.push({
-        pathname: '/winner',
-        params: {
-          correctAnswers: 5,
-          isWinner: "true",
-        },
-      });
-    }, 2000);
-  }
-}, [correctAnswers, router, stopSound, setIsPlaying]);
+
 
 
   // Handle option press
@@ -231,7 +221,9 @@ useEffect(() => {
     console.log(`Option "${option}" selected.`);
     if (!selectedAnswer) {
       setSelectedAnswer(option);
-      if (option === correctAnswer) {
+      if (option === correctAnswer && correctAnswers<5) {
+    
+        console.log(correctAnswers)
         setTimeout(() => {
           moveToNextQuestion();
           playThinkingSound();
