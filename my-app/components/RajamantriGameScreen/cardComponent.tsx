@@ -1,4 +1,3 @@
-// PlayerCard.tsx
 import React from "react";
 import { Text, TouchableOpacity, Image, Animated } from "react-native";
 import { styles } from "@/screens/RajaMantriGameScreen/styles";
@@ -13,7 +12,14 @@ interface PlayerCardProps {
   animatedStyle: any;
 }
 
-const PlayerCard: React.FC<PlayerCardProps> = ({
+const roleImages: { [key: string]: any } = {
+  King: require("../../assets/images/chorsipahi/king.jpg"),
+  Advisor: require("../../assets/images/chorsipahi/advisor.jpg"),
+  Thief: require("../../assets/images/chorsipahi/thief.jpg"),
+  Police: require("../../assets/images/chorsipahi/police.jpg"),
+};
+
+const PlayerCard: React.FC<PlayerCardProps> = React.memo(({
   index,
   role,
   playerName,
@@ -22,13 +28,6 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
   onClick,
   animatedStyle,
 }) => {
-  const roleImages: { [key: string]: any } = {
-    King: require("../../assets/images/chorsipahi/king.jpg"),
-    Advisor: require("../../assets/images/chorsipahi/advisor.jpg"),
-    Thief: require("../../assets/images/chorsipahi/thief.jpg"),
-    Police: require("../../assets/images/chorsipahi/police.jpg"),
-  };
-
   const renderContent = () => {
     if (flipped) {
       if (role === "Police") {
@@ -56,6 +55,6 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
       </Animated.View>
     </TouchableOpacity>
   );
-};
+});
 
 export default PlayerCard;

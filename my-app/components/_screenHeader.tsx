@@ -1,22 +1,23 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { AntDesign } from '@expo/vector-icons'
 import {
     responsiveHeight,
     responsiveWidth,
     responsiveFontSize
 } from "react-native-responsive-dimensions";
-import { useRouter } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 
 interface ScreenHeaderProps {
   name: string;
 }
 
 const ScreenHeader: React.FC<ScreenHeaderProps> = ({ name }) => {
-  const router =useRouter();
+  const navigation = useNavigation();
+  
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={() => router.back()} >
+      <TouchableOpacity onPress={() => navigation.goBack()} >
         <AntDesign name="arrowleft" size={29} color="white" />
       </TouchableOpacity>
       <Text style={styles.headerTitle}>{name}</Text>
@@ -24,7 +25,8 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({ name }) => {
   )
 }
 
-export default ScreenHeader
+export default ScreenHeader;
+
 
 const styles = StyleSheet.create({
   header: {

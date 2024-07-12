@@ -6,12 +6,12 @@ interface GameMessageProps {
   message: string;
 }
 
-const GameMessage: React.FC<GameMessageProps> = ({ message }) => {
+const GameMessage: React.FC<GameMessageProps> = React.memo(({ message }) => {
   return (
     <View style={styles.messageBox}>
       <Text style={styles.messageText}>{message}</Text>
     </View>
   );
-};
+});
 
 export default GameMessage;

@@ -5,7 +5,7 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { styles } from '@/screens/QuizScreen/QuizscreenCss';
 import { Ionicons } from '@expo/vector-icons'
 import {  responsiveScreenFontSize } from 'react-native-responsive-dimensions'
-import useQuiz from '@/hooks/useQuizScreen';
+
 
 interface HeaderComponentProps {
   onTimeUp: () => void;

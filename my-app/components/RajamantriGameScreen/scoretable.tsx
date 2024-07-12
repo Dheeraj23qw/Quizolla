@@ -8,7 +8,7 @@ interface ScoreTableProps {
   playerScores: Array<{ playerName: string; scores: number[] }>;
 }
 
-const ScoreTable: React.FC<ScoreTableProps> = ({ playerNames, playerScores }) => {
+const ScoreTable: React.FC<ScoreTableProps> = React.memo(({ playerNames, playerScores }) => {
   return (
     <View style={styles.table}>
       {/* Header row */}
@@ -38,6 +38,6 @@ const ScoreTable: React.FC<ScoreTableProps> = ({ playerNames, playerScores }) =>
       ))}
     </View>
   );
-};
+});
 
 export default ScoreTable;

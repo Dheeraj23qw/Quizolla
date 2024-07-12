@@ -30,7 +30,8 @@ const QuizScreen: React.FC<QuizScreenProps> = ({name}) => {
     handleOptionPress,
     useLifeline,
     handleTimeUp,
-    isPlaying
+    isPlaying,
+
   } = useQuiz();
 
   return (

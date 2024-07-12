@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { questions } from '@/constants/question'; 
 import useQuizSoundManager from './useQuizSound'; 
 
-interface QuizState {
+export interface QuizState {
   currentQuestionIndex: number;
   currentQuestion: {
     id: number;
@@ -28,22 +28,37 @@ interface QuizState {
   handleTimeUp: () => void;
   flipQuestion: () => void;
   moveToNextQuestion: () => void;
+
 }
 
 const useQuiz = (): QuizState => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [flippedQuestionIndex, setFlippedQuestionIndex] = useState<number | null>(null);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [usedHint, setUsedHint] = useState<boolean>(false);
-  const [usedFiftyFifty, setUsedFiftyFifty] = useState<boolean>(false);
-  const [usedFlip, setUsedFlip] = useState<boolean>(false);
-  const [hint, setHint] = useState<string | null>(null);
-  const [fiftyFiftyOptions, setFiftyFiftyOptions] = useState<string[]>([]);
-  const [skippedQuestions, setSkippedQuestions] = useState<number[]>([]);
-  const [correctAnswers, setCorrectAnswers] = useState<number>(0);
-  const [timeLeft, setTimeLeft] = useState<number>(10);
-  const [timerKey, setTimerKey] = useState<number>(0);
-  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const initialQuestionIndex = 0;
+  const initialFlippedQuestionIndex = null;
+  const initialSelectedAnswer = null;
+  const initialUsedHint = false;
+  const initialUsedFiftyFifty = false;
+  const initialUsedFlip = false;
+  const initialHint = null;
+  const initialFiftyFiftyOptions: string[] = [];
+  const initialSkippedQuestions: number[] = [];
+  const initialCorrectAnswers = 0;
+  const initialTimeLeft = 10;
+  const initialTimerKey = 0;
+  const initialIsPlaying = true;
+
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(initialQuestionIndex);
+  const [flippedQuestionIndex, setFlippedQuestionIndex] = useState<number | null>(initialFlippedQuestionIndex);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(initialSelectedAnswer);
+  const [usedHint, setUsedHint] = useState<boolean>(initialUsedHint);
+  const [usedFiftyFifty, setUsedFiftyFifty] = useState<boolean>(initialUsedFiftyFifty);
+  const [usedFlip, setUsedFlip] = useState<boolean>(initialUsedFlip);
+  const [hint, setHint] = useState<string | null>(initialHint);
+  const [fiftyFiftyOptions, setFiftyFiftyOptions] = useState<string[]>(initialFiftyFiftyOptions);
+  const [skippedQuestions, setSkippedQuestions] = useState<number[]>(initialSkippedQuestions);
+  const [correctAnswers, setCorrectAnswers] = useState<number>(initialCorrectAnswers);
+  const [timeLeft, setTimeLeft] = useState<number>(initialTimeLeft);
+  const [timerKey, setTimerKey] = useState<number>(initialTimerKey);
+  const [isPlaying, setIsPlaying] = useState<boolean>(initialIsPlaying);
 
   const {
     loadSounds,
@@ -84,7 +99,7 @@ const useQuiz = (): QuizState => {
             isWinner: "true",
           },
         });
-      }, 1); 
+      }, 1000); // Reduced timeout for faster transition
 
       return () => clearTimeout(timer);
     } else if (selectedAnswer === correctAnswer && correctAnswers < limitedQuestions.length && selectedAnswer !== null) {
@@ -202,14 +217,17 @@ const useQuiz = (): QuizState => {
 
     // Increment current question index and handle looping back to start
     setCurrentQuestionIndex(prevIndex => (prevIndex + 1) % limitedQuestions.length);
+    
   }, [selectedAnswer, correctAnswer, limitedQuestions.length, correctAnswers]);
+
+
 
   // Handle option press
   const handleOptionPress = useCallback((option: string) => {
     console.log(`Option "${option}" selected.`);
     if (!selectedAnswer) {
       setSelectedAnswer(option);
-      if (option === correctAnswer && correctAnswers < limitedQuestions.length) {
+      if (option === correctAnswer) {
         setTimeout(() => {
           moveToNextQuestion();
           playThinkingSound();
@@ -238,6 +256,7 @@ const useQuiz = (): QuizState => {
     handleTimeUp,
     flipQuestion,
     moveToNextQuestion,
+
   };
 };
 

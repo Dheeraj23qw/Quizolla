@@ -14,4 +14,4 @@ const HintComponent: React.FC<HintComponentProps> = ({ hint }) => {
   );
 };
 
-export default HintComponent;
+export default React.memo(HintComponent);

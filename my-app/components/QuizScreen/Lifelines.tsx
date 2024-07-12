@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { styles } from '@/screens/QuizScreen/QuizscreenCss';
 import { LifelineComponentProps } from '@/types/quizScreenTypes';
@@ -16,13 +16,20 @@ const LifelineComponent: React.FC<LifelineComponentProps> = ({
     { name: 'Flip', used: usedFlip },
   ];
 
+  const handleUseLifeline = useCallback(
+    (name: string) => {
+      useLifeline(name);
+    },
+    [useLifeline]
+  );
+
   return (
     <View style={styles.lifelineContainer}>
       {lifelines.map(({ name, used }, index) => (
         <TouchableOpacity
           key={index}
           style={[styles.lifeline, used ? styles.disabledLifeline : null]}
-          onPress={() => useLifeline(name)}
+          onPress={() => handleUseLifeline(name)}
           disabled={used || !!selectedAnswer}
         >
           <Text style={styles.lifelineText}>{name}</Text>
@@ -32,4 +39,4 @@ const LifelineComponent: React.FC<LifelineComponentProps> = ({
   );
 };
 
-export default LifelineComponent;
+export default React.memo(LifelineComponent);

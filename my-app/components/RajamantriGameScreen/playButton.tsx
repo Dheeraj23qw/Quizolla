@@ -9,7 +9,7 @@ interface PlayButtonProps {
   buttonText: string;
 }
 
-const PlayButton: React.FC<PlayButtonProps> = ({ disabled, onPress, buttonText }) => {
+const PlayButton: React.FC<PlayButtonProps> = React.memo(({ disabled, onPress, buttonText }) => {
   return (
     <Pressable onPress={onPress} disabled={disabled}>
       <View style={[styles.playButton, disabled && styles.playButtonDisabled]}>
@@ -17,6 +17,7 @@ const PlayButton: React.FC<PlayButtonProps> = ({ disabled, onPress, buttonText }
       </View>
     </Pressable>
   );
-};
+});
 
 export default PlayButton;
+

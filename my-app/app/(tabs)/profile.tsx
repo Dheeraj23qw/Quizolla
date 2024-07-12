@@ -8,6 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import Winner from "@/screens/WinnerScreen/Winner";
 import RajaMantriQuizScreen from "@/screens/RajaMantriGameScreen/Rajamantriquizscreen";
+import RajaMantriGameScreen from "@/screens/RajaMantriGameScreen/RajaMantriGameScreen";
 export default function profile() {
   return (
     // <SafeAreaView style={globalstyles.container}>
@@ -18,7 +19,8 @@ export default function profile() {
     //   </View>
     // </SafeAreaView>
     <>
-   <RajaMantriQuizScreen/>
+   {/* <RajaMantriQuizScreen/> */}
+   <RajaMantriGameScreen/>
     </>
   );
 }
