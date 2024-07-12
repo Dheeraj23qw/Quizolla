@@ -1,11 +1,11 @@
-import { TouchableOpacity, View, Image } from "react-native";
 import React from "react";
+import { TouchableOpacity, View, Image } from "react-native";
 import { globalstyles } from "@/styles/global";
 import { cardstyles } from "@/styles/card";
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 import { useRouter } from "expo-router";
 
-const DailyQuiz = () => {
+const DailyQuiz = React.memo(() => {
   const router = useRouter();
   
   return (
@@ -20,6 +20,6 @@ const DailyQuiz = () => {
       </TouchableOpacity>
     </View>
   );
-};
+});
 
 export default DailyQuiz;

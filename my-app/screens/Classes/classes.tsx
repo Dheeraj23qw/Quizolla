@@ -23,8 +23,18 @@ const renderClassItem = ({ item }: RenderClassItemProps) => (
   </TouchableOpacity>
 );
 
-export default function Classes() {
-  const router =useRouter()
+const Classes = React.memo(() => {
+  const router = useRouter();
+
+  // Array of sections to render
+  const sections = [
+    { title: 'Kindergarten Classes', data: classesData.kindergarten },
+    { title: 'Primary School Classes', data: classesData.primary },
+    { title: 'Secondary School Classes', data: classesData.secondary },
+    { title: 'Higher School Classes', data: classesData.higher },
+    { title: 'Competitive Exams', data: classesData.competitive },
+  ];
+
   return (
     <SafeAreaView style={styles.container}>
       {/* StatusBar */}
@@ -34,70 +44,28 @@ export default function Classes() {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Back arrow */}
-        <TouchableOpacity  onPress={() => router.back()} style={styles.backButton}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
 
-        {/* Kindergarten Classes */}
-        <Text style={styles.sectionTitle}>Kindergarten Classes</Text>
-        <FlatList
-          horizontal
-          data={classesData.kindergarten}
-          renderItem={renderClassItem}
-          keyExtractor={(item) => item}
-          showsHorizontalScrollIndicator={false}
-          style={styles.flatList}
-          contentContainerStyle={styles.flatListContent}
-        />
-
-        {/* Primary School Classes */}
-        <Text style={styles.sectionTitle}>Primary School Classes</Text>
-        <FlatList
-          horizontal
-          data={classesData.primary}
-          renderItem={renderClassItem}
-          keyExtractor={(item) => item}
-          showsHorizontalScrollIndicator={false}
-          style={styles.flatList}
-          contentContainerStyle={styles.flatListContent}
-        />
-
-        {/* Secondary School Classes */}
-        <Text style={styles.sectionTitle}>Secondary School Classes</Text>
-        <FlatList
-          horizontal
-          data={classesData.secondary}
-          renderItem={renderClassItem}
-          keyExtractor={(item) => item}
-          showsHorizontalScrollIndicator={false}
-          style={styles.flatList}
-          contentContainerStyle={styles.flatListContent}
-        />
-
-        {/* Higher School Classes */}
-        <Text style={styles.sectionTitle}>Higher School Classes</Text>
-        <FlatList
-          horizontal
-          data={classesData.higher}
-          renderItem={renderClassItem}
-          keyExtractor={(item) => item}
-          showsHorizontalScrollIndicator={false}
-          style={styles.flatList}
-          contentContainerStyle={styles.flatListContent}
-        />
-
-        {/* Competitive Exams */}
-        <Text style={styles.sectionTitle}>Competitive Exams</Text>
-        <FlatList
-          horizontal
-          data={classesData.competitive}
-          renderItem={renderClassItem}
-          keyExtractor={(item) => item}
-          showsHorizontalScrollIndicator={false}
-          style={styles.flatList}
-          contentContainerStyle={styles.flatListContent}
-        />
+        {/* Render each section */}
+        {sections.map(({ title, data }) => (
+          <View key={title}>
+            <Text style={styles.sectionTitle}>{title}</Text>
+            <FlatList
+              horizontal
+              data={data}
+              renderItem={renderClassItem}
+              keyExtractor={(item) => item}
+              showsHorizontalScrollIndicator={false}
+              style={styles.flatList}
+              contentContainerStyle={styles.flatListContent}
+            />
+          </View>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
-}
+});
+
+export default Classes;
