@@ -59,12 +59,8 @@ const useQuiz = (): QuizState => {
     ? limitedQuestions[flippedQuestionIndex]
     : limitedQuestions[currentQuestionIndex];
 
-
   const { question, options, correctAnswer, hint: questionHint } = currentQuestion;
-
   const router = useRouter();
-
-
 
   // Load sounds on component mount and unload on unmount
   useEffect(() => {
@@ -74,10 +70,9 @@ const useQuiz = (): QuizState => {
     };
   }, []);
 
-  
+  // Handle correct answer scenario
   useEffect(() => {
-    if (correctAnswers === 5 && selectedAnswer !== null) {
-      console.log("All 5 questions answered correctly. Moving to winner screen.");
+    if (correctAnswers === limitedQuestions.length) {
       stopSound();
       setIsPlaying(false);
   
@@ -85,14 +80,14 @@ const useQuiz = (): QuizState => {
         router.push({
           pathname: '/winner',
           params: {
-            correctAnswers:5,
+            correctAnswers,
             isWinner: "true",
           },
         });
-      }, 2000);
+      }, 1); 
 
       return () => clearTimeout(timer);
-    } else if (selectedAnswer === correctAnswer && correctAnswers < 5 && selectedAnswer !== null) {
+    } else if (selectedAnswer === correctAnswer && correctAnswers < limitedQuestions.length && selectedAnswer !== null) {
       console.log("Correct answer selected. Playing correct sound.");
       stopSound();
       playCorrectSound();
@@ -100,7 +95,7 @@ const useQuiz = (): QuizState => {
         if (correctAnswers < limitedQuestions.length - 1) {
           playThinkingSound();
         }
-      }, 2000);
+      }, 2000); // Adjust timeout delay as needed
     }
   }, [
     correctAnswers, 
@@ -111,11 +106,10 @@ const useQuiz = (): QuizState => {
     correctAnswer, 
     limitedQuestions, 
     playCorrectSound, 
-    playThinkingSound
+    playThinkingSound,
   ]);
-  
 
-  // Handle wrong answer selected
+  // Handle wrong answer scenario
   useEffect(() => {
     if (selectedAnswer !== null && selectedAnswer !== correctAnswer) {
       console.log("Wrong answer selected. Moving to winner screen.");
@@ -131,7 +125,7 @@ const useQuiz = (): QuizState => {
             isWinner: "false",
           },
         });
-      }, 2000);
+      }, 2000); // Adjust timeout delay as needed
 
       return () => clearTimeout(timer);
     }
@@ -141,7 +135,7 @@ const useQuiz = (): QuizState => {
   const handleTimeUp = useCallback(() => {
     console.log("Handling time up scenario.");
     stopSound();
-    if (correctAnswers < 5 && !selectedAnswer) {
+    if (correctAnswers < limitedQuestions.length && !selectedAnswer) {
       console.log("Time up and question not answered. Moving to winner screen.");
       router.push({
         pathname: '/winner',
@@ -197,37 +191,29 @@ const useQuiz = (): QuizState => {
   }, [usedHint, usedFiftyFifty, usedFlip, questionHint, options, correctAnswer, flipQuestion, setIsPlaying]);
 
   // Move to the next question
+  const moveToNextQuestion = useCallback(() => {
+    console.log("Moving to next question.");
+    setSelectedAnswer(null);
+    setHint(null);
+    setFiftyFiftyOptions([]);
+    setFlippedQuestionIndex(null);
+    setCorrectAnswers(prev => prev + 1);
+    setTimerKey(prevKey => prevKey + 1);
 
-const moveToNextQuestion = useCallback(() => {
-  console.log("Moving to next question.");
-  setSelectedAnswer(null);
-  setHint(null);
-  setFiftyFiftyOptions([]);
-  setFlippedQuestionIndex(null);
-  
-  setCorrectAnswers(prev => prev + 1);
-  setTimerKey(prevKey => prevKey + 1);
-
-  // Increment current question index and handle looping back to start
-  setCurrentQuestionIndex(prevIndex => (prevIndex + 1) % limitedQuestions.length);
-
-}, [selectedAnswer, correctAnswer, limitedQuestions.length,correctAnswers]);
-
-
-
+    // Increment current question index and handle looping back to start
+    setCurrentQuestionIndex(prevIndex => (prevIndex + 1) % limitedQuestions.length);
+  }, [selectedAnswer, correctAnswer, limitedQuestions.length, correctAnswers]);
 
   // Handle option press
   const handleOptionPress = useCallback((option: string) => {
     console.log(`Option "${option}" selected.`);
     if (!selectedAnswer) {
       setSelectedAnswer(option);
-      if (option === correctAnswer && correctAnswers<5) {
-    
-        console.log(correctAnswers)
+      if (option === correctAnswer && correctAnswers < limitedQuestions.length) {
         setTimeout(() => {
           moveToNextQuestion();
           playThinkingSound();
-        }, 2000);
+        }, 2000); // Adjust timeout delay as needed
       }
     }
   }, [selectedAnswer, correctAnswer, moveToNextQuestion, playThinkingSound]);
