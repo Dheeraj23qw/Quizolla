@@ -84,4 +84,11 @@ export const styles = StyleSheet.create({
     scrollView: {
       flex: 1,
     },
+    fullScreenContainer: {
+     flex:1,
+     backgroundColor:"black"
+    },
+    fullScreenVideo: {
+      flex:1
+    },
 });

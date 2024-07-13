@@ -1,4 +1,3 @@
-// useRajaMantriGame.ts
 import { useState, useEffect, useRef } from "react";
 import { Animated } from "react-native";
 
@@ -31,6 +30,8 @@ const useRajaMantriGame = ({ playerNames }: UseRajaMantriGameOptions) => {
     }))
   );
   const [round, setRound] = useState<number>(1);
+  const [videoIndex, setVideoIndex] = useState<number>(1);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     resetGame();
@@ -49,6 +50,8 @@ const useRajaMantriGame = ({ playerNames }: UseRajaMantriGameOptions) => {
     setThiefIndex(null);
     setKingIndex(null);
     setPoliceIndex(null);
+    setVideoIndex(1);
+    setIsPlaying(true)
     setPlayerScores(
       playerNames.map((name) => ({
         playerName: name,
@@ -121,12 +124,16 @@ const useRajaMantriGame = ({ playerNames }: UseRajaMantriGameOptions) => {
         setMessage(
           `Great detective work, ${policePlayerName}! You found the Thief! ${playerNames[thiefIndex]} was the Thief of this round, but you kept your cool! Keep it up!`
         );
+        setTimeout(() => {
+          setVideoIndex(3);
+        setIsPlaying(true);
+        }, 3000);
         revealAllCards();
         updateScore(thiefIndex, 0, round - 1);
         updateScore(policeIndex, 500, round - 1);
         updateScore(advisorIndex, 800, round - 1);
         updateScore(kingIndex, 1000, round - 1);
-        setTimeout(() => resetForNextRound(), 6000);
+        setTimeout(() => resetForNextRound(), 12000);
       } else {
         setPoliceClickCount((prevCount) => {
           const newCount = prevCount + 1;
@@ -134,16 +141,22 @@ const useRajaMantriGame = ({ playerNames }: UseRajaMantriGameOptions) => {
             setMessage(
               `Oops, ${policePlayerName}, you couldn't find the Thief this time. ${playerNames[thiefIndex]} was the Thief of this round and gets 500 points. Better luck next time!`
             );
+            setTimeout(() => {
+              setVideoIndex(2);
+            setIsPlaying(true);
+            }, 2500);
             revealAllCards();
             updateScore(thiefIndex, 500, round - 1);
             updateScore(policeIndex, 0, round - 1);
             updateScore(advisorIndex, 800, round - 1);
             updateScore(kingIndex, 1000, round - 1);
-            setTimeout(() => resetForNextRound(), 5000);
+            setTimeout(() => resetForNextRound(), 12000);
           } else {
             setMessage(
               `Keep trying, ${policePlayerName}! You're on the right track. Your 500 points will transfer to the Thief if you don't find them in your next attempt. Choose wisely!`
             );
+          
+            
           }
           return newCount;
         });
@@ -187,17 +200,19 @@ const useRajaMantriGame = ({ playerNames }: UseRajaMantriGameOptions) => {
         setRound((prevRound) => prevRound + 1);
         setTimeout(() => {
           resetForNextRound();
-        }, 5000);
+        }, 8000);
       }
     });
   };
 
   const revealAllCards = () => {
-    roles.forEach((_, index) => {
-      if (!flippedStates[index]) {
-        flipCard(index, 1, 500);
-      }
-    });
+    setTimeout(() => {
+      roles.forEach((_, index) => {
+        if (!flippedStates[index]) {
+          flipCard(index, 1, 500);
+        }
+      });
+    }, 100);
   };
 
   const resetForNextRound = () => {
@@ -208,21 +223,26 @@ const useRajaMantriGame = ({ playerNames }: UseRajaMantriGameOptions) => {
       setFlipAnims(initialFlipAnims.map(() => new Animated.Value(0)));
       setFlippedStates(initialFlippedStates);
       setClickedCards(initialClickedCards);
-      setIsPlayButtonDisabled(false);
       setSelectedPlayer(1);
+      setIsPlayButtonDisabled(false);
       setPoliceClickCount(0);
-      setMessage("Press the Button to Start the Next Round.");
+      setAdvisorIndex(null);
+      setThiefIndex(null);
+      setKingIndex(null);
+      setPoliceIndex(null);
+      setVideoIndex(1);
+      setMessage("Next round! Press the Button to Start the Game.");
     }
   };
 
-  function shuffleArray(array: any[]): any[] {
-    const shuffledArray = [...array];
-    for (let i = shuffledArray.length - 1; i > 0; i--) {
+  const shuffleArray = (array: any[]) => {
+    const newArray = array.slice();
+    for (let i = newArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
-    return shuffledArray;
-  }
+    return newArray;
+  };
 
   return {
     flipAnims,
@@ -240,7 +260,10 @@ const useRajaMantriGame = ({ playerNames }: UseRajaMantriGameOptions) => {
     thiefIndex,
     playerScores,
     round,
+    videoIndex,
+    isPlaying,
     handlePlay,
+    setIsPlaying,
     handleCardClick,
     updateScore,
     resetGame,

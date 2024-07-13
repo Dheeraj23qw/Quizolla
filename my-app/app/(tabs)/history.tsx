@@ -7,6 +7,7 @@ import Classes from '@/screens/Classes/classes'
 import QuizScreen from '@/screens/QuizScreen/QuizScreen'
 import RajaMantriGameScreen from '@/screens/RajaMantriGameScreen/RajaMantriGameScreen'
 import GamesScreen from '@/screens/GameScreen/GameScreen'
+import VideoPlayerComponent from '@/screens/playScreen'
 
 export default function history() {
   return (
@@ -14,7 +15,7 @@ export default function history() {
     {/* <QuizDetailScreen/> */}
  {/* <ResultScreen/> */}
  {/* <Winner/> */}
-<GamesScreen/>
+<VideoPlayerComponent/>
     </>
   )
 }
