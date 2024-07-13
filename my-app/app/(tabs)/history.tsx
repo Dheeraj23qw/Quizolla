@@ -15,7 +15,7 @@ export default function history() {
     {/* <QuizDetailScreen/> */}
  {/* <ResultScreen/> */}
  {/* <Winner/> */}
-<VideoPlayerComponent/>
+<GamesScreen/>
     </>
   )
 }
