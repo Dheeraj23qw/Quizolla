@@ -1,9 +1,11 @@
 import React from 'react';
-import { SafeAreaView, FlatList, Text, View, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
+import { SafeAreaView, FlatList, Text, View, TouchableOpacity, ScrollView, StatusBar, ImageBackground } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import { styles } from './classesCSS';
 import { useRouter } from 'expo-router';
+import ScreenHeader from '@/components/_screenHeader';
+import { globalstyles } from '@/styles/global';
 
 const classesData = {
   kindergarten: ['KG 1', 'KG 2'],
@@ -36,17 +38,20 @@ const Classes = React.memo(() => {
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
+<SafeAreaView style={globalstyles.container}>
       {/* StatusBar */}
       <StatusBar
-        backgroundColor="#BEA1FE"
+        backgroundColor="#8E5DE9"
         barStyle="dark-content"
       />
+      <ScreenHeader name="Rewards" />
+      <View style={[globalstyles.Container2, { flex: 10 }]}>
+        <ImageBackground
+          source={require('../../assets/images/chorsipahi/chorpolicequiz.jpg')}
+          resizeMode="cover"
+        >
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Back arrow */}
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <AntDesign name="arrowleft" size={24} color="black" />
-        </TouchableOpacity>
+        
 
         {/* Render each section */}
         {sections.map(({ title, data }) => (
@@ -64,6 +69,8 @@ const Classes = React.memo(() => {
           </View>
         ))}
       </ScrollView>
+      </ImageBackground>
+      </View>
     </SafeAreaView>
   );
 });

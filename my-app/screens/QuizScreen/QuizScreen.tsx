@@ -37,7 +37,7 @@ const QuizScreen: React.FC<QuizScreenProps> = ({name}) => {
   return (
   
       <SafeAreaView style={globalstyles.container}>
-        <StatusBar backgroundColor="#BEA1FE" barStyle="dark-content" />
+        <StatusBar backgroundColor="#8E5DE9" barStyle="dark-content" />
 
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
      

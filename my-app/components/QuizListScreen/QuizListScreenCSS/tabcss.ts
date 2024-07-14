@@ -23,7 +23,7 @@ export const tabcss = StyleSheet.create({
         flex: 1, // Added to ensure equal space
       },
       activeTab: {
-        backgroundColor: "#BEA1FE",
+        backgroundColor: "#8E5DE9",
         borderBottomColor: "lightgrey",
         borderBottomWidth: responsiveWidth(0.5), // Increased for better visibility
       },

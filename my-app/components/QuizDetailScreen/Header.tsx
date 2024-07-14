@@ -7,7 +7,7 @@ export default function Header() {
   return (
     <View style={headerCSS.container}>
       <View style={headerCSS.headerContainer}>
-        <Ionicons name="school" size={responsiveScreenFontSize(5)} color="#BEA1FE" />
+        <Ionicons name="school" size={responsiveScreenFontSize(5)} color="#8E5DE9" />
         <Text style={headerCSS.headerText}>General Knowledge Quiz</Text>
       </View>
       <View style={headerCSS.subTextContainer}>

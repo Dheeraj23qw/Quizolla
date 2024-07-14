@@ -4,28 +4,32 @@ import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-nat
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: responsiveWidth(4),
+ 
     backgroundColor: '#f0f0f0',
   },
   playButton: {
     padding: responsiveWidth(8),
-    backgroundColor: '#FF6347', 
+    backgroundColor: '296F00', 
     alignItems: 'center',
-    marginBottom: responsiveHeight(4),
+    marginVertical: responsiveHeight(4),
     borderRadius: responsiveWidth(10),
-    borderWidth: 2,
-    borderColor: '#FF4500', 
+    borderWidth: 9,
+    borderColor: '#296F00', 
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    overflow:"hidden"
   },
   playButtonText: {
-    color: '#fff', 
-    fontSize: responsiveFontSize(4), 
-    fontFamily: "outfit-bold", 
-    letterSpacing: 1,
+    color: '#fff',
+    fontSize: responsiveFontSize(4), // increased font size
+    fontFamily: "outfit-bold",
+    textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)', // added text shadow
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
   
   playButtonDisabled: {
@@ -56,9 +60,12 @@ export const styles = StyleSheet.create({
   },
   cardText: {
     color: '#fff',
-    fontSize: responsiveFontSize(3),
+    fontSize: responsiveFontSize(3.5), // increased font size
     fontFamily: "outfit-bold",
-   
+    textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)', // added text shadow
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
   cardImage: {
     width: responsiveWidth(35),
@@ -93,9 +100,13 @@ export const styles = StyleSheet.create({
     borderRadius: responsiveWidth(1),
   },
   cellText: {
-    fontSize: responsiveFontSize(2),
+    color: '#fff',
+    fontSize: responsiveFontSize(2.5), // increased font size
     fontFamily: "outfit-bold",
-    color: '#FF1493',
+    textAlign: 'center',
+    textShadowColor: 'rgba(255, 182, 193, 0.1)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
   scrollView: {
     flex: 1,
@@ -106,6 +117,29 @@ export const styles = StyleSheet.create({
   },
   fullScreenVideo: {
     flex: 1,
+  },
+  backgroundImage: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  playerNmaeCardImage:{
+   width:"100%",
+   height:"100%",
+   
+    justifyContent: 'center',
+    backgroundColor: '#87CEFA',
+    alignItems: 'center',
+    
+    borderWidth: 3,
+    borderColor: '#1E90FF',
+    borderRadius: responsiveWidth(40),
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)', // semi-transparent black
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: responsiveWidth(20), // Ensure the overlay also respects the card's border radius
   },
 });
 

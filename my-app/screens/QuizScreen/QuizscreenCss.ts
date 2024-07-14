@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     paddingBottom: responsiveHeight(2),
     borderBottomWidth: 1,
     borderBottomColor: "#dee2e6",
-    backgroundColor: "#BEA1FE",
+    backgroundColor: "#8E5DE9",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     gap:8
@@ -134,7 +134,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#6c757d",
     borderRadius: 999,
-    backgroundColor: "#BEA1FE",
+    backgroundColor: "#8E5DE9",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,

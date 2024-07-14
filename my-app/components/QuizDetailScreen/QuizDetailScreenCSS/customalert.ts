@@ -31,7 +31,7 @@ import {
       marginTop: responsiveHeight(2),
     },
     button: {
-      backgroundColor: '#BEA1FE',
+      backgroundColor: '#8E5DE9',
       padding: responsiveHeight(1.5),
       borderRadius: responsiveWidth(2),
       flex: 1,

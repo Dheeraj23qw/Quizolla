@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
   ScrollView,
   StatusBar,
+  ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./styles";
@@ -47,12 +48,25 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
   const handleVideoEnd = () => {
     setIsPlaying(false); 
   };
+const [isplay,setIsplay] = useState(false)
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor="#BEA1FE" barStyle="dark-content" />
+      <StatusBar backgroundColor="#8E5DE9" barStyle="dark-content" />
      
-        {isPlaying ? (
+        {isplay ? (
           <VideoPlayerComponent
             videoIndex={videoIndex}
             onVideoEnd={handleVideoEnd}
@@ -60,6 +74,13 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
         ) : (
           
           <>
+          <ImageBackground
+        
+          source={require('../../assets/images/chorsipahi/chorpolicequiz.jpg')}
+          resizeMode="cover"
+          style={styles.backgroundImage}
+        
+        >
           <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}> 
             <PlayButton
               disabled={isPlayButtonDisabled}
@@ -92,7 +113,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
               ))}
             </View>
             <View style={styles.cardRow}>
-              {roles.slice(2).map((_, index) => ( // Second row with remaining cards
+              {roles.slice(2).map((_, index) => (
                 <PlayerCard
                   key={index + 2}
                   index={index + 2}
@@ -118,6 +139,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
               <ScoreTable playerNames={playerNames} playerScores={playerScores} />
             </View>
             </ScrollView>
+            </ImageBackground>
           </>
         )}
       

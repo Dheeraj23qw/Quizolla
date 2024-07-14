@@ -15,7 +15,7 @@ import {
         shadowColor: "black",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
-        backgroundColor: "#BEA1FE",
+        backgroundColor: "#8E5DE9",
       },
       section: {
         flexDirection: "row",

@@ -18,7 +18,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({ name }) => {
   return (
     <View style={styles.header}>
       <TouchableOpacity onPress={() => navigation.goBack()} >
-        <AntDesign name="arrowleft" size={29} color="white" />
+        <AntDesign name="arrowleft" size={32} color="white" style={styles.iconStyle} />
       </TouchableOpacity>
       <Text style={styles.headerTitle}>{name}</Text>
     </View>
@@ -31,7 +31,7 @@ export default ScreenHeader;
 const styles = StyleSheet.create({
   header: {
     flex:1,
-    backgroundColor: '#BEA1FE',
+    backgroundColor: '#8E5DE9',
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: responsiveWidth(6),
@@ -40,8 +40,17 @@ const styles = StyleSheet.create({
   
 },
     headerTitle: {
-        fontSize: responsiveFontSize(3),
-        color: 'white',
-        fontFamily:'outfit-bold',
-    }
+      color: '#fff',
+      fontSize: responsiveFontSize(4),
+      fontFamily: "outfit-bold",
+      textAlign: 'center',
+      textShadowColor: 'rgba(0, 0, 0, 0.75)',
+      textShadowOffset: { width: -1, height: 1 },
+      textShadowRadius: 10,
+    },
+    iconStyle: {
+      textShadowColor: 'rgba(0, 0, 0, 0.75)', 
+      textShadowOffset: { width: -1, height: 2 },
+      textShadowRadius: 5,
+    },
 })

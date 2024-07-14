@@ -3,13 +3,10 @@ import { StyleSheet } from 'react-native';
  export const styles = StyleSheet.create({
     container: {
       flex: 1,
-      paddingHorizontal: responsiveWidth(4),
-      paddingTop: responsiveHeight(5),
+      
       backgroundColor:"white"
     },
-    backButton: {
-      marginVertical: responsiveHeight(2),
-    },
+  
     sectionTitle: {
       fontSize: responsiveFontSize(2.5),
       fontWeight: 'bold',
@@ -31,6 +28,10 @@ import { StyleSheet } from 'react-native';
       borderRadius: 8,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    backgroundImage: {
+      flex: 1,
+      justifyContent: 'center',
     },
 
   });
