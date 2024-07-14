@@ -29,6 +29,7 @@
     "expo-linear-gradient": "~13.0.2",
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.17",
+    "expo-screen-orientation": "~7.0.5",
     "expo-secure-store": "~13.0.2",
     "expo-splash-screen": "~0.27.5",
     "expo-status-bar": "~1.12.1",
@@ -43,6 +44,7 @@
     "react-native-countdown-circle-timer": "^3.2.1",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.16.1",
+    "react-native-linear-gradient": "^2.8.3",
     "react-native-modal": "^13.0.1",
     "react-native-reanimated": "~3.10.1",
     "react-native-responsive-dimensions": "^3.1.1",
@@ -52,8 +54,7 @@
     "react-native-svg-transformer": "^1.4.0",
     "react-native-vector-icons": "^10.1.0",
     "react-native-web": "~0.19.10",
-    "react-timer-hook": "^3.0.7",
-    "expo-screen-orientation": "~7.0.5"
+    "react-timer-hook": "^3.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

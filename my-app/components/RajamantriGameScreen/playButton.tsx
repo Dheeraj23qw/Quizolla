@@ -20,4 +20,3 @@ const PlayButton: React.FC<PlayButtonProps> = React.memo(({ disabled, onPress, b
 });
 
 export default PlayButton;
-

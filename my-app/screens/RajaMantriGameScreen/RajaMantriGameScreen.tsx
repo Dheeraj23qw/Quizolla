@@ -51,51 +51,76 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#BEA1FE" barStyle="dark-content" />
-      {isPlaying ? (
-        <VideoPlayerComponent
-          videoIndex={videoIndex}
-          onVideoEnd={handleVideoEnd}
-        />
-      ) : (
-        <>
-          <View style={styles.messageBox}>
-            <Text style={styles.messageText}>{message}</Text>
-          </View>
-          <PlayButton
-            disabled={isPlayButtonDisabled}
-            onPress={handlePlay}
-            buttonText={
-              isPlayButtonDisabled ? `Round ${round}` : `Press to play!`
-            }
+     
+        {isPlaying ? (
+          <VideoPlayerComponent
+            videoIndex={videoIndex}
+            onVideoEnd={handleVideoEnd}
           />
-          <View style={styles.cardRow}>
-            {roles.map((_, index) => (
-              <PlayerCard
-                key={index}
-                index={index}
-                role={roles[index]}
-                playerName={playerNames[index]}
-                flipped={flippedStates[index]}
-                clicked={clickedCards[index]}
-                onClick={handleCardClick}
-                animatedStyle={{
-                  transform: [
-                    {
-                      rotateY: flipAnims[index].interpolate({
-                        inputRange: [0, 1],
-                        outputRange: ["0deg", "7200deg"],
-                      }),
-                    },
-                  ],
-                }}
-              />
-            ))}
-          </View>
-          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-            <ScoreTable playerNames={playerNames} playerScores={playerScores} />
-          </ScrollView>
-        </>
-      )}
+        ) : (
+          
+          <>
+          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}> 
+            <PlayButton
+              disabled={isPlayButtonDisabled}
+              onPress={handlePlay}
+              buttonText={
+                isPlayButtonDisabled ? `Round ${round}` : `Press to play!`
+              }
+            />
+            <View style={styles.cardRow}>
+              {roles.slice(0, 2).map((_, index) => ( // First row with 2 cards
+                <PlayerCard
+                  key={index}
+                  index={index}
+                  role={roles[index]}
+                  playerName={playerNames[index]}
+                  flipped={flippedStates[index]}
+                  clicked={clickedCards[index]}
+                  onClick={handleCardClick}
+                  animatedStyle={{
+                    transform: [
+                      {
+                        rotateY: flipAnims[index].interpolate({
+                          inputRange: [0, 1],
+                          outputRange: ["0deg", "7200deg"],
+                        }),
+                      },
+                    ],
+                  }}
+                />
+              ))}
+            </View>
+            <View style={styles.cardRow}>
+              {roles.slice(2).map((_, index) => ( // Second row with remaining cards
+                <PlayerCard
+                  key={index + 2}
+                  index={index + 2}
+                  role={roles[index + 2]}
+                  playerName={playerNames[index + 2]}
+                  flipped={flippedStates[index + 2]}
+                  clicked={clickedCards[index + 2]}
+                  onClick={handleCardClick}
+                  animatedStyle={{
+                    transform: [
+                      {
+                        rotateY: flipAnims[index + 2].interpolate({
+                          inputRange: [0, 1],
+                          outputRange: ["0deg", "7200deg"],
+                        }),
+                      },
+                    ],
+                  }}
+                />
+              ))}
+            </View>
+            <View style={styles.scrollView}>
+              <ScoreTable playerNames={playerNames} playerScores={playerScores} />
+            </View>
+            </ScrollView>
+          </>
+        )}
+      
     </SafeAreaView>
   );
 };

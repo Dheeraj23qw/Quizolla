@@ -28,7 +28,6 @@ export interface QuizState {
   handleTimeUp: () => void;
   flipQuestion: () => void;
   moveToNextQuestion: () => void;
-
 }
 
 const useQuiz = (): QuizState => {
@@ -103,7 +102,6 @@ const useQuiz = (): QuizState => {
 
       return () => clearTimeout(timer);
     } else if (selectedAnswer === correctAnswer && correctAnswers < limitedQuestions.length && selectedAnswer !== null) {
-      console.log("Correct answer selected. Playing correct sound.");
       stopSound();
       playCorrectSound();
       setTimeout(() => {
@@ -127,7 +125,6 @@ const useQuiz = (): QuizState => {
   // Handle wrong answer scenario
   useEffect(() => {
     if (selectedAnswer !== null && selectedAnswer !== correctAnswer) {
-      console.log("Wrong answer selected. Moving to winner screen.");
       stopSound();
       playWrongSound();
       setIsPlaying(false); 
@@ -148,10 +145,8 @@ const useQuiz = (): QuizState => {
 
   // Handle time up scenario
   const handleTimeUp = useCallback(() => {
-    console.log("Handling time up scenario.");
     stopSound();
     if (correctAnswers < limitedQuestions.length && !selectedAnswer) {
-      console.log("Time up and question not answered. Moving to winner screen.");
       router.push({
         pathname: '/winner',
         params: {
@@ -164,14 +159,12 @@ const useQuiz = (): QuizState => {
 
   useEffect(() => {
     if (timeLeft === 0) {
-      console.log("Time up for the current question. Handling time up.");
       handleTimeUp();
     }
   }, [timeLeft, handleTimeUp]);
 
   // Flip to a new question
   const flipQuestion = useCallback(() => {
-    console.log("Flipping question.");
     const usedQuestionIds = [...skippedQuestions, limitedQuestions[currentQuestionIndex].id];
     let newQuestionIndex;
     do {
@@ -181,12 +174,11 @@ const useQuiz = (): QuizState => {
     setFlippedQuestionIndex(newQuestionIndex);
     setSkippedQuestions(prevSkippedQuestions => [...prevSkippedQuestions, currentQuestionIndex]);
     setTimerKey(prevKey => prevKey + 1);
-    setIsPlaying(false); // Set isPlaying to false after flipping question
+    setIsPlaying(false);
   }, [currentQuestionIndex, limitedQuestions, skippedQuestions, setIsPlaying]);
 
   // Use a lifeline (Hint, 50-50, Flip)
   const useLifeline = useCallback((lifeline: string) => {
-    console.log(`Using lifeline: ${lifeline}`);
     if (lifeline === 'Hint' && !usedHint) {
       setUsedHint(true);
       setHint(questionHint);
@@ -201,13 +193,12 @@ const useQuiz = (): QuizState => {
       setHint(null);
       setFiftyFiftyOptions([]);
       flipQuestion();
-      setIsPlaying(true); // Set isPlaying to true after flipping question
+      setIsPlaying(true);
     }
   }, [usedHint, usedFiftyFifty, usedFlip, questionHint, options, correctAnswer, flipQuestion, setIsPlaying]);
 
   // Move to the next question
   const moveToNextQuestion = useCallback(() => {
-    console.log("Moving to next question.");
     setSelectedAnswer(null);
     setHint(null);
     setFiftyFiftyOptions([]);
@@ -215,16 +206,12 @@ const useQuiz = (): QuizState => {
     setCorrectAnswers(prev => prev + 1);
     setTimerKey(prevKey => prevKey + 1);
 
-    // Increment current question index and handle looping back to start
     setCurrentQuestionIndex(prevIndex => (prevIndex + 1) % limitedQuestions.length);
     
   }, [selectedAnswer, correctAnswer, limitedQuestions.length, correctAnswers]);
 
-
-
   // Handle option press
   const handleOptionPress = useCallback((option: string) => {
-    console.log(`Option "${option}" selected.`);
     if (!selectedAnswer) {
       setSelectedAnswer(option);
       if (option === correctAnswer) {
@@ -256,7 +243,6 @@ const useQuiz = (): QuizState => {
     handleTimeUp,
     flipQuestion,
     moveToNextQuestion,
-
   };
 };
 

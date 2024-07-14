@@ -13,9 +13,7 @@ const ScoreTable: React.FC<ScoreTableProps> = React.memo(({ playerNames, playerS
     <View style={styles.table}>
       {/* Header row */}
       <View style={styles.tableRow}>
-        <View style={styles.tableCell}>
-          <Text style={styles.cellText}>Rounds</Text>
-        </View>
+        
         {playerNames.map((name, index) => (
           <View key={index} style={styles.tableCell}>
             <Text style={styles.cellText}>{name}</Text>
@@ -26,9 +24,7 @@ const ScoreTable: React.FC<ScoreTableProps> = React.memo(({ playerNames, playerS
       {/* Data rows for rounds and scores */}
       {Array.from({ length: 10 }, (_, rowIndex) => (
         <View key={rowIndex} style={styles.tableRow}>
-          <View style={styles.tableCell}>
-            <Text style={styles.cellText}>Round {rowIndex + 1}</Text>
-          </View>
+          
           {playerScores.map((player, index) => (
             <View key={index} style={styles.tableCell}>
               <Text style={styles.cellText}>{player.scores[rowIndex]}</Text>
