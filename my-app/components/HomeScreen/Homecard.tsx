@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react';
-import { View, TouchableOpacity, Image } from 'react-native';
-import { globalstyles } from '@/styles/global';
-import { cardstyles } from '@/styles/card';
-import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
+import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { homeCardstyles } from './HomeScreenCss/bodyCss';
 
 const Homecard = React.memo(() => {
     const images = useMemo(() => [
@@ -12,14 +10,15 @@ const Homecard = React.memo(() => {
     ], []);
 
     return (
-        <View style={[globalstyles.Container3, { justifyContent: 'space-between' }]}>
+        <View style={homeCardstyles.container}>
             {images.map((image, index) => (
-                <TouchableOpacity key={index} style={[cardstyles.Card, { height: responsiveHeight(20), width: responsiveWidth(30) }]}>
-                    <Image source={image} style={cardstyles.cardImage} />
+                <TouchableOpacity key={index} style={homeCardstyles.card}>
+                    <Image source={image} style={homeCardstyles.cardImage} />
                 </TouchableOpacity>
             ))}
         </View>
     );
 });
+
 
 export default Homecard;

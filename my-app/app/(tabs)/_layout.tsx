@@ -21,20 +21,20 @@ export default function TabLayout() {
       }}
     />
     <Tabs.Screen
-      name="history"
+      name="games"
       options={{
-        title: 'History',
+        title: 'Games',
         tabBarIcon: ({ color, focused }) => (
-          <TabBarIcon name={focused ? 'time' : 'time-outline'} color={color} />
+          <TabBarIcon name={focused ? 'game-controller-sharp' : 'game-controller-outline'} color={color} />
         ),
       }}
     />
     <Tabs.Screen
-      name="bookmark"
+      name="rewards"
       options={{
-        title: 'Bookmark',
+        title: 'Rewards',
         tabBarIcon: ({ color, focused }) => (
-          <TabBarIcon name={focused ? 'bookmark' : 'bookmark-outline'} color={color} />
+          <TabBarIcon name={focused ? 'trophy' : 'trophy-outline'} color={color} />
         ),
       }}
     />

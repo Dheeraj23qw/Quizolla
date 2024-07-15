@@ -1,48 +1,46 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
-import { globalstyles } from "@/styles/global";
-import { cardstyles } from "@/styles/card";
 import { useRouter } from "expo-router";
-
+import { exploreStyles } from "./HomeScreenCss/bodyCss";
 const ExploreClasses = React.memo(() => {
   const router = useRouter();
 
   return (
-    <View style={[globalstyles.container, { backgroundColor: "white" }]}>
-      <View style={[globalstyles.Container3, { paddingRight: responsiveHeight(3) }]}>
-        <Text style={[globalstyles.headerText]}>Explore Classes</Text>
+    <View style={exploreStyles.container}>
+      <View style={exploreStyles.headerContainer}>
+        <Text style={exploreStyles.headerText}>Explore Classes</Text>
         <TouchableOpacity onPress={() => router.push("/classrooms")}>
-          <AntDesign name="arrowright" size={26} color="black" />
+          <AntDesign name="arrowright" size={32} color="black" style={exploreStyles.iconStyle}/>
         </TouchableOpacity>
       </View>
-      <View style={[globalstyles.container, { flex: 3, gap: responsiveWidth(2), backgroundColor: "white" }]}>
-        <View style={[globalstyles.Container3, { justifyContent: "space-around" }]}>
-          <TouchableOpacity style={[cardstyles.Card, { height: responsiveHeight(8), width: responsiveWidth(40) }]}>
+      <View style={exploreStyles.cardsContainer}>
+        <View style={exploreStyles.row}>
+          <TouchableOpacity style={exploreStyles.card}>
             <Image
               source={require("../../assets/images/homeImages/5.png")}
-              style={[cardstyles.cardImage, { resizeMode: 'cover' }]}
+              style={exploreStyles.cardImage}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={[cardstyles.Card, { height: responsiveHeight(8), width: responsiveWidth(40) }]}>
+          <TouchableOpacity style={exploreStyles.card}>
             <Image
               source={require("../../assets/images/homeImages/6.png")}
-              style={[cardstyles.cardImage, { resizeMode: 'cover' }]}
+              style={exploreStyles.cardImage}
             />
           </TouchableOpacity>
         </View>
-        <View style={[globalstyles.Container3, { justifyContent: "space-around" }]}>
-          <TouchableOpacity style={[cardstyles.Card, { height: responsiveHeight(8), width: responsiveWidth(40) }]}>
+        <View style={exploreStyles.row}>
+          <TouchableOpacity style={exploreStyles.card}>
             <Image
               source={require("../../assets/images/homeImages/7.png")}
-              style={[cardstyles.cardImage, { resizeMode: 'cover' }]}
+              style={exploreStyles.cardImage}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={[cardstyles.Card, { height: responsiveHeight(8), width: responsiveWidth(40) }]}>
+          <TouchableOpacity style={exploreStyles.card}>
             <Image
               source={require("../../assets/images/homeImages/8.png")}
-              style={[cardstyles.cardImage, { resizeMode: 'cover' }]}
+              style={exploreStyles.cardImage}
             />
           </TouchableOpacity>
         </View>
@@ -50,5 +48,7 @@ const ExploreClasses = React.memo(() => {
     </View>
   );
 });
+
+
 
 export default ExploreClasses;

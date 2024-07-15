@@ -1,25 +1,26 @@
 import React from "react";
-import { TouchableOpacity, View, Image } from "react-native";
-import { globalstyles } from "@/styles/global";
-import { cardstyles } from "@/styles/card";
+import { View, Image, StyleSheet,  TouchableOpacity } from "react-native";
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 import { useRouter } from "expo-router";
-
+import { dailyQuizStyles } from "./HomeScreenCss/bodyCss";
 const DailyQuiz = React.memo(() => {
   const router = useRouter();
-  
+
   return (
-    <View style={[globalstyles.Container4, { borderRadius: responsiveWidth(0.6) }]}>
-      <TouchableOpacity onPress={() => router.push("/joinquiz")}>
-        <View style={[cardstyles.Card, { height: responsiveHeight(100), width: responsiveWidth(100) }]}>
-          <Image
-            source={require("../../assets/images/homeImages/4.png")}
-            style={cardstyles.cardImage}
-          />
-        </View>
+    <View style={dailyQuizStyles.container}>
+      <TouchableOpacity
+        onPress={() => router.push("/joinquiz")}
+        style={dailyQuizStyles.card}
+      >
+        <Image
+          source={require("../../assets/images/homeImages/4.png")}
+          style={dailyQuizStyles.cardImage}
+        />
       </TouchableOpacity>
     </View>
   );
 });
+
+
 
 export default DailyQuiz;

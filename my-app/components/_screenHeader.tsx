@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     paddingLeft: responsiveWidth(6),
     justifyContent:'flex-start',
     gap:responsiveWidth(6),
+    marginTop: responsiveWidth(2)
   
 },
     headerTitle: {
