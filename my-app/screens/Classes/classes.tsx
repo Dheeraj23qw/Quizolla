@@ -1,11 +1,10 @@
 import React from 'react';
-import { SafeAreaView, FlatList, Text, View, TouchableOpacity, ScrollView, StatusBar, ImageBackground } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { SafeAreaView, Text, View, TouchableOpacity, ScrollView, StatusBar, ImageBackground,StyleSheet } from 'react-native';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
-import { styles } from './classesCSS';
 import { useRouter } from 'expo-router';
 import ScreenHeader from '@/components/_screenHeader';
 import { globalstyles } from '@/styles/global';
+import { Classstyles } from './classesCSS';
 
 const classesData = {
   kindergarten: ['KG 1', 'KG 2'],
@@ -14,16 +13,6 @@ const classesData = {
   higher: ['Class 11', 'Class 12'],
   competitive: ['JEE', 'NEET', 'UPSC', 'CAT', 'GATE']
 };
-
-type RenderClassItemProps = {
-  item: string; 
-};
-
-const renderClassItem = ({ item }: RenderClassItemProps) => (
-  <TouchableOpacity style={styles.classItem}>
-    <Text>{item}</Text>
-  </TouchableOpacity>
-);
 
 const Classes = React.memo(() => {
   const router = useRouter();
@@ -38,38 +27,34 @@ const Classes = React.memo(() => {
   ];
 
   return (
-<SafeAreaView style={globalstyles.container}>
-      {/* StatusBar */}
-      <StatusBar
-        backgroundColor="#8E5DE9"
-        barStyle="dark-content"
-      />
-      <ScreenHeader name="Rewards" />
-      <View style={[globalstyles.Container2, { flex: 10 }]}>
-        <ImageBackground
-          source={require('../../assets/images/chorsipahi/chorpolicequiz.jpg')}
-          resizeMode="cover"
-        >
-      <ScrollView showsVerticalScrollIndicator={false}>
-        
+    <SafeAreaView style={globalstyles.container}>
+   
+      <View style={{ flex:1 ,marginTop:40,paddingVertical:10}}>
+      <ScreenHeader name="Classes"/>
+      </View>
+     
 
-        {/* Render each section */}
-        {sections.map(({ title, data }) => (
-          <View key={title}>
-            <Text style={styles.sectionTitle}>{title}</Text>
-            <FlatList
-              horizontal
-              data={data}
-              renderItem={renderClassItem}
-              keyExtractor={(item) => item}
-              showsHorizontalScrollIndicator={false}
-              style={styles.flatList}
-              contentContainerStyle={styles.flatListContent}
-            />
-          </View>
-        ))}
-      </ScrollView>
-      </ImageBackground>
+      <View style={[globalstyles.Container2, { flex: 10 }]}>
+      
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {sections.map(({ title, data }) => (
+              <View key={title} style={Classstyles.sectionContainer}>
+                <Text style={Classstyles.sectionTitle}>{title}</Text>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={Classstyles.scrollViewContent}
+                >
+                  {data.map((item) => (
+                    <TouchableOpacity key={item} style={Classstyles.classItem}>
+                      <Text style={Classstyles.classItemText}>{item}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            ))}
+          </ScrollView>
+   
       </View>
     </SafeAreaView>
   );
