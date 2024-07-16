@@ -1,8 +1,10 @@
-import RajaMantriGameScreen from "@/screens/RajaMantriGameScreen/RajaMantriGameScreen";
+import RajaMantriQuizScreen from "@/screens/RajaMantriGameScreen/Rajamantriquizscreen";
+
+
 export default function profile() {
   return (
     <>
-      <RajaMantriGameScreen />
+  <RajaMantriQuizScreen/>
     </>
   );
 }

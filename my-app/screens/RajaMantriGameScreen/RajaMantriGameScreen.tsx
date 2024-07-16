@@ -41,7 +41,7 @@ const RajaMantriGameScreen: React.FC<RajaMantriGameScreenProps> = () => {
     setIsPlaying,
     handleCardClick,
     updateScore,
-    resetGame,
+    // resetGame,
     resetForNextRound,
   } = useRajaMantriGame({ playerNames });
 

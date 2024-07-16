@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Animated } from "react-native";
+import { useRouter } from 'expo-router';
 
 interface UseRajaMantriGameOptions {
   playerNames: string[];
@@ -33,32 +34,37 @@ const useRajaMantriGame = ({ playerNames }: UseRajaMantriGameOptions) => {
   const [videoIndex, setVideoIndex] = useState<number>(1);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  useEffect(() => {
-    resetGame();
-  }, []);
 
-  const resetGame = () => {
-    setFlipAnims(initialFlipAnims.map(() => new Animated.Value(0)));
-    setFlippedStates(initialFlippedStates);
-    setClickedCards(initialClickedCards);
-    setSelectedPlayer(1);
-    setIsPlayButtonDisabled(false);
-    setRound(1);
-    setMessage("Welcome! Press the Button to Start the Game.");
-    setPoliceClickCount(0);
-    setAdvisorIndex(null);
-    setThiefIndex(null);
-    setKingIndex(null);
-    setPoliceIndex(null);
-    setVideoIndex(1);
-    setIsPlaying(true)
-    setPlayerScores(
-      playerNames.map((name) => ({
-        playerName: name,
-        scores: Array.from({ length: 10 }, () => 0),
-      }))
-    );
-  };
+  const router = useRouter();
+
+
+
+  // useEffect(() => {
+  //   resetGame();
+  // }, []);
+
+  // const resetGame = () => {
+  //   setFlipAnims(initialFlipAnims.map(() => new Animated.Value(0)));
+  //   setFlippedStates(initialFlippedStates);
+  //   setClickedCards(initialClickedCards);
+  //   setSelectedPlayer(1);
+  //   setIsPlayButtonDisabled(false);
+  //   setRound(1);
+  //   setMessage("Welcome! Press the Button to Start the Game.");
+  //   setPoliceClickCount(0);
+  //   setAdvisorIndex(null);
+  //   setThiefIndex(null);
+  //   setKingIndex(null);
+  //   setPoliceIndex(null);
+  //   setVideoIndex(1);
+  //   setIsPlaying(true)
+  //   setPlayerScores(
+  //     playerNames.map((name) => ({
+  //       playerName: name,
+  //       scores: Array.from({ length: 10 }, () => 0),
+  //     }))
+  //   );
+  // };
 
   const handlePlay = () => {
     const randomIndex = Math.floor(Math.random() * 4);
@@ -216,8 +222,9 @@ const useRajaMantriGame = ({ playerNames }: UseRajaMantriGameOptions) => {
   };
 
   const resetForNextRound = () => {
-    if (round >= 10) {
-      resetGame();
+    if (round >= 3) {
+      // resetGame();
+      router.push("/chorpolicequiz")
     } else {
       setRound((count) => count + 1);
       setFlipAnims(initialFlipAnims.map(() => new Animated.Value(0)));
@@ -266,7 +273,7 @@ const useRajaMantriGame = ({ playerNames }: UseRajaMantriGameOptions) => {
     setIsPlaying,
     handleCardClick,
     updateScore,
-    resetGame,
+    // resetGame,
     resetForNextRound,
   };
 };

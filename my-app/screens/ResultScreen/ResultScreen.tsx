@@ -14,7 +14,7 @@ import Review from "@/components/ResultScreen/Review";
 const ResultScreen = () => {
   return (
     <SafeAreaView style={globalstyles.container}>
-      <ScreenHeader name="Score" />
+      <ScreenHeader name="Score" showBackButton = {false} />
       <View style={[globalstyles.Container2, { flex: 10 }]}>
         <View style={[cardstyles.Card, {flex: 1,backgroundColor: "white",}]}>
 

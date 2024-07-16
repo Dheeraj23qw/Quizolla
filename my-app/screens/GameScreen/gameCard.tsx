@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useRouter } from "expo-router";
 
 interface GameCardProps {
   title: string;
@@ -17,8 +18,11 @@ interface GameCardProps {
 
 const GameCard: React.FC<GameCardProps> = React.memo(
   ({ title, imageSource, secondIcon }) => {
+
+
+    const router = useRouter()
     return (
-      <TouchableOpacity style={styles.card}>
+      <TouchableOpacity style={styles.card} onPress={()=>{router.push('/chorpolicegame')}}>
         <ImageBackground
           source={imageSource}
           style={styles.cardImage}
